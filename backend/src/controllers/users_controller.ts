@@ -47,6 +47,8 @@ const usersController = {
         const trx = await knex.transaction();
         const insertedId = await trx("users").insert(user);
 
+        await trx.commit();
+
         return res.status(201).json({ user: { id: insertedId[0], ...user } });
       },
       ({ errors, path }) => {
@@ -84,6 +86,8 @@ const usersController = {
         const updatedId = await trx("users")
           .where({ id })
           .update(user, ["name", "cpf", "whatsapp"]);
+
+        await trx.commit();
 
         return res.status(201).json({ updatedId });
       },
