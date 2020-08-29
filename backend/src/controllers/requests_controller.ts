@@ -4,27 +4,30 @@ import knex from "../database/connection";
 
 const requestsController = {
   index: async (req: Request, res: Response): Promise<Response> => {
-    const users = await knex("requests").select("*");
-    return res.status(200).json(users);
+    const requests = await knex("requests").select("*");
+    return res.status(200).json(requests);
   },
   show: async (req: Request, res: Response): Promise<Response> => {
     const { id } = req.params;
 
-    const userExist = await knex("requests").where("requests.id", Number(id));
+    const requests = await knex("requests")
+      .where("requests.id", Number(id))
+      .first();
 
-    if (!userExist[0]) {
+    if (!requests) {
       return res.status(404).json({
         field: "id",
         error: "O pedido informado não existe."
       });
     }
 
-    const requests = await knex("requests")
-      .select("*")
-      .where("requests.id", Number(id))
+    const item = await knex("items")
+      .join("requests_items", "requests_items.item_id", "items.id")
+      .where("requests_items.request_id", id)
+      .select("items.name", "items.image")
       .first();
 
-    return res.status(200).json(requests);
+    return res.status(200).json({ requests, item });
   },
   create: async (req: Request, res: Response): Promise<void> => {
     const schema = Yup.object().shape({
