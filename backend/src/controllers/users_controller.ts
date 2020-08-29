@@ -5,7 +5,7 @@ import knex from "../database/connection";
 const usersController = {
   index: async (req: Request, res: Response): Promise<Response> => {
     const users = await knex("users").select("*");
-    return res.json(users);
+    return res.status(200).json(users);
   },
   create: async (req: Request, res: Response): Promise<void> => {
     const schema = Yup.object().shape({
@@ -58,10 +58,6 @@ const usersController = {
   },
   update: async (req: Request, res: Response): Promise<void> => {
     const schema = Yup.object().shape({
-      name: Yup.string().required("O campo nome não pode ficar em branco."),
-      cpf: Yup.string()
-        .required("O campo cpf não pode ficar em branco.")
-        .min(14, "Número de CPF inválido."),
       whatsapp: Yup.string()
         .min(14, "O número informado é inválido.")
         .required("O campo WhatsApp não pode ficar em branco.")
@@ -70,8 +66,7 @@ const usersController = {
     await schema.validate(req.body).then(
       async () => {
         const { id } = req.params;
-        const { name, cpf, whatsapp } = req.body;
-        const user = { name, cpf, whatsapp };
+        const { whatsapp } = req.body;
 
         const userExist = await knex("users").where("users.id", Number(id));
 
@@ -85,11 +80,11 @@ const usersController = {
         const trx = await knex.transaction();
         const updatedId = await trx("users")
           .where({ id })
-          .update(user, ["name", "cpf", "whatsapp"]);
+          .update("whatsapp", whatsapp);
 
         await trx.commit();
 
-        return res.status(201).json({ updatedId });
+        return res.status(200).json({ updatedId });
       },
       ({ errors, path }) => {
         return res.status(422).json({ field: path, error: errors[0] });
