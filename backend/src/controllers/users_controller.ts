@@ -7,6 +7,25 @@ const usersController = {
     const users = await knex("users").select("*");
     return res.status(200).json(users);
   },
+  show: async (req: Request, res: Response): Promise<Response> => {
+    const { id } = req.params;
+
+    const userExist = await knex("users").where("users.id", Number(id));
+
+    if (!userExist[0]) {
+      return res.status(404).json({
+        field: "id",
+        error: "Usuário não está cadastrado na aplicação."
+      });
+    }
+
+    const users = await knex("users")
+      .select("*")
+      .where("users.id", Number(id))
+      .first();
+
+    return res.status(200).json(users);
+  },
   create: async (req: Request, res: Response): Promise<void> => {
     const schema = Yup.object().shape({
       name: Yup.string().required("O campo nome não pode ficar em branco."),
