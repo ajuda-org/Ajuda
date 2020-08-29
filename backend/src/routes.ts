@@ -1,9 +1,8 @@
 import { Router } from "express";
+import itemsController from "./controllers/items_controller";
 
 const routes = Router();
 
-routes.get("/", (req, res) => {
-  res.json({ msg: "deu boa" });
-});
+routes.get("/items", itemsController.index);
 
 export default routes;
