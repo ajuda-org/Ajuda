@@ -36,7 +36,7 @@ const usersController = {
         if (userExist) {
           return res.status(401).json({
             field: "email",
-            error: "E-mail já está cadastrado na aplicação."
+            error: "E-mail já esta cadastrado na aplicação."
           });
         }
 
