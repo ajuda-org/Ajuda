@@ -1,5 +1,7 @@
 module.exports = {
   singleQuote: false,
-  trailingComma: "all",
+  trailingComma: "none",
+  tabWidth: 2,
+  useTabs: false,
   arrowParens: "avoid",
 };
