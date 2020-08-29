@@ -1,5 +1,9 @@
 import { Router } from "express";
-import { itemsController, usersController } from "./controllers";
+import {
+  itemsController,
+  usersController,
+  requestsController
+} from "./controllers";
 
 const routes = Router();
 
@@ -7,6 +11,10 @@ routes.get("/users", usersController.index);
 routes.get("/users/:id", usersController.show);
 routes.post("/users", usersController.create);
 routes.put("/users/:id", usersController.update);
+
+routes.get("/requests", requestsController.index);
+routes.get("/requests/:id", requestsController.show);
+routes.post("/requests", requestsController.create);
 
 routes.get("/items", itemsController.index);
 
