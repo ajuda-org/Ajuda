@@ -1,6 +1,6 @@
 import Knex from "knex";
 
-const createItems = async function seed(knex: Knex) {
+export async function seed(knex: Knex) {
   await knex("items").insert([
     { name: "Mercado", image: "market.svg" },
     { name: "Farmácia", image: "drugstore.svg" },
@@ -10,5 +10,3 @@ const createItems = async function seed(knex: Knex) {
     { name: "Outros", image: "others.svg" }
   ]);
 };
-
-export default createItems;
