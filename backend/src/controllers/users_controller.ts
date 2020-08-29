@@ -3,6 +3,10 @@ import { Request, Response } from "express";
 import knex from "../database/connection";
 
 const usersController = {
+  index: async (req: Request, res: Response): Promise<Response> => {
+    const users = await knex("users").select("*");
+    return res.json(users);
+  },
   create: async (req: Request, res: Response): Promise<void> => {
     const schema = Yup.object().shape({
       name: Yup.string().required("O campo nome não pode ficar em branco."),
@@ -33,7 +37,7 @@ const usersController = {
 
         const userExist = await knex("users").where("users.email", email);
 
-        if (userExist) {
+        if (userExist[0]) {
           return res.status(401).json({
             field: "email",
             error: "E-mail já esta cadastrado na aplicação."
@@ -44,6 +48,44 @@ const usersController = {
         const insertedId = await trx("users").insert(user);
 
         return res.status(201).json({ user: { id: insertedId[0], ...user } });
+      },
+      ({ errors, path }) => {
+        return res.status(422).json({ field: path, error: errors[0] });
+      }
+    );
+  },
+  update: async (req: Request, res: Response): Promise<void> => {
+    const schema = Yup.object().shape({
+      name: Yup.string().required("O campo nome não pode ficar em branco."),
+      cpf: Yup.string()
+        .required("O campo cpf não pode ficar em branco.")
+        .min(14, "Número de CPF inválido."),
+      whatsapp: Yup.string()
+        .min(14, "O número informado é inválido.")
+        .required("O campo WhatsApp não pode ficar em branco.")
+    });
+
+    await schema.validate(req.body).then(
+      async () => {
+        const { id } = req.params;
+        const { name, cpf, whatsapp } = req.body;
+        const user = { name, cpf, whatsapp };
+
+        const userExist = await knex("users").where("users.id", Number(id));
+
+        if (!userExist[0]) {
+          return res.status(404).json({
+            field: "id",
+            error: "Usuário não está cadastrado na aplicação."
+          });
+        }
+
+        const trx = await knex.transaction();
+        const updatedId = await trx("users")
+          .where({ id })
+          .update(user, ["name", "cpf", "whatsapp"]);
+
+        return res.status(201).json({ updatedId });
       },
       ({ errors, path }) => {
         return res.status(422).json({ field: path, error: errors[0] });
