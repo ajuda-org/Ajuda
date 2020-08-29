@@ -2,8 +2,8 @@
 
 ### User
 - name: string
-- cpf: integer
-- whatsapp: integer
+- cpf: string
+- whatsapp: string
 - email: string
 - password: string
 - type: string (helper || helped)
