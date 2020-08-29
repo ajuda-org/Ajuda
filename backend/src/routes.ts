@@ -1,7 +1,9 @@
 import { Router } from "express";
-import itemsController from "./controllers/items_controller";
+import { itemsController, usersController } from "./controllers";
 
 const routes = Router();
+
+routes.post("/users", usersController.create);
 
 routes.get("/items", itemsController.index);
 
