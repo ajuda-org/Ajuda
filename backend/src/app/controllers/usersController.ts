@@ -6,14 +6,8 @@ import { userService } from "../services";
 
 const usersController = {
   index: async (req: Request, res: Response): Promise<Response> => {
-    const users = await knex("users").select(
-      "id",
-      "name",
-      "cpf",
-      "whatsapp",
-      "email",
-      "type"
-    );
+    const users = await userService.listAll();
+
     return res.status(200).json(users);
   },
   show: async (req: Request, res: Response): Promise<Response> => {
