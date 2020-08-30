@@ -5,20 +5,21 @@ import knex from "../../database/connection";
 const helpersController = {
   index: async (req: Request, res: Response): Promise<void> => {
     const schema = Yup.object().shape({
-      items: Yup.string().required("É obrigatório informar os ids dos items.")
+      userId: Yup.string().required("É obrigatório informar o id do ajudante.")
     });
 
     await schema.validate(req.query).then(
       async () => {
-        const { items } = req.query;
-        const parsedItems = String(items)
-          .split(",")
-          .map(item => Number(item.trim()));
+        const { userId } = req.query;
 
         const requests = await knex("requests")
-          .join("requests_items", "requests_items.request_id", "requests.id")
-          .whereIn("requests_items.item_id", parsedItems)
-          .where("requests.status", Number(0))
+          .join(
+            "requests_helpers",
+            "requests_helpers.request_id",
+            "requests.id"
+          )
+          .where("requests_helpers.user_id", Number(userId))
+          .whereNot("requests.status", 0)
           .distinct()
           .select("requests.*");
 
