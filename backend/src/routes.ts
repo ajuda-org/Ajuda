@@ -2,10 +2,13 @@ import { Router } from "express";
 import {
   itemsController,
   usersController,
-  requestsController
+  requestsController,
+  sessionsController
 } from "./app/controllers";
 
 const routes = Router();
+
+routes.post("/sessions", sessionsController.create);
 
 routes.get("/users", usersController.index);
 routes.get("/users/:id", usersController.show);

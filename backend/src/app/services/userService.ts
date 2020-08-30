@@ -8,8 +8,12 @@ const userService = {
     const encryptedPassword = await bcrypt.hash(password, 8);
     return encryptedPassword;
   },
-  checkPassword: (hashPassword: string, password: string): Promise<boolean> => {
-    return bcrypt.compare(password, hashPassword);
+  checkPassword: async (
+    hashPassword: string,
+    password: string
+  ): Promise<boolean> => {
+    const isValid = bcrypt.compare(hashPassword, password);
+    return isValid;
   },
   listAll: async (): Promise<IUserInterface[]> => {
     const users = await userRepositpry.listAllUsers();
