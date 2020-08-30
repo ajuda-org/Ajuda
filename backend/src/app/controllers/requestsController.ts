@@ -3,10 +3,33 @@ import { Request, Response } from "express";
 import knex from "../../database/connection";
 
 const requestsController = {
-  index: async (req: Request, res: Response): Promise<Response> => {
-    const requests = await knex("requests").select("*");
-    return res.status(200).json(requests);
+  index: async (req: Request, res: Response): Promise<void> => {
+    const schema = Yup.object().shape({
+      items: Yup.string().required("É obrigatório informar os ids dos items.")
+    });
+
+    await schema.validate(req.query).then(
+      async () => {
+        const { items } = req.query;
+        const parsedItems = String(items)
+          .split(",")
+          .map(item => Number(item.trim()));
+
+        const requests = await knex("requests")
+          .join("requests_items", "requests_items.request_id", "requests.id")
+          .whereIn("requests_items.item_id", parsedItems)
+          .where("requests.status", 0)
+          .distinct()
+          .select("requests.*");
+
+        return res.status(200).json(requests);
+      },
+      ({ errors, path }) => {
+        return res.status(422).json({ field: path, error: errors[0] });
+      }
+    );
   },
+
   show: async (req: Request, res: Response): Promise<Response> => {
     const { id } = req.params;
 
