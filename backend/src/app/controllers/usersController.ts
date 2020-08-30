@@ -1,10 +1,19 @@
 import * as Yup from "yup";
 import { Request, Response } from "express";
-import knex from "../database/connection";
+import knex from "../../database/connection";
+
+import { userService } from "../services";
 
 const usersController = {
   index: async (req: Request, res: Response): Promise<Response> => {
-    const users = await knex("users").select("*");
+    const users = await knex("users").select(
+      "id",
+      "name",
+      "cpf",
+      "whatsapp",
+      "email",
+      "type"
+    );
     return res.status(200).json(users);
   },
   show: async (req: Request, res: Response): Promise<Response> => {
@@ -52,8 +61,6 @@ const usersController = {
     await schema.validate(req.body).then(
       async () => {
         const { name, cpf, whatsapp, type, email, password } = req.body;
-        const user = { name, cpf, whatsapp, type, email, password };
-
         const userExist = await knex("users").where("users.email", email);
 
         if (userExist[0]) {
@@ -62,6 +69,17 @@ const usersController = {
             error: "E-mail já esta cadastrado na aplicação."
           });
         }
+
+        const encryptedPassword = await userService.encryptPassword(password);
+
+        const user = {
+          name,
+          cpf,
+          whatsapp,
+          type,
+          email,
+          password: encryptedPassword
+        };
 
         const trx = await knex.transaction();
         const insertedId = await trx("users").insert(user);

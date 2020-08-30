@@ -3,7 +3,7 @@ import {
   itemsController,
   usersController,
   requestsController
-} from "./controllers";
+} from "./app/controllers";
 
 const routes = Router();
 
