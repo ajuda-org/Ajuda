@@ -1,3 +1,3 @@
-export { default as itemsController } from "./items_controller";
-export { default as usersController } from "./users_controller";
-export { default as requestsController } from "./requests_controller";
+export { default as itemsController } from "./itemsController";
+export { default as usersController } from "./usersController";
+export { default as requestsController } from "./requestsController";
