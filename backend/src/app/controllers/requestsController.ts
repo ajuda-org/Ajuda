@@ -60,9 +60,10 @@ const requestsController = {
 
         const userIsHelped = await knex("users")
           .where("users.id", id)
-          .where("users.type", "helped");
+          .where("users.type", "helped")
+          .first();
 
-        if (!userIsHelped[0]) {
+        if (!userIsHelped) {
           return res.status(401).json({
             field: "type",
             error:

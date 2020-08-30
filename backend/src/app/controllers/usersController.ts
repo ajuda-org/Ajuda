@@ -13,9 +13,9 @@ const usersController = {
   show: async (req: Request, res: Response): Promise<Response> => {
     const { id } = req.params;
 
-    const userExist = await knex("users").where("users.id", Number(id));
+    const userExist = await knex("users").where("users.id", Number(id)).first();
 
-    if (!userExist[0]) {
+    if (!userExist) {
       return res.status(404).json({
         field: "id",
         error: "Usuário não está cadastrado na aplicação."
@@ -55,9 +55,11 @@ const usersController = {
     await schema.validate(req.body).then(
       async () => {
         const { name, cpf, whatsapp, type, email, password } = req.body;
-        const userExist = await knex("users").where("users.email", email);
+        const userExist = await knex("users")
+          .where("users.email", email)
+          .first();
 
-        if (userExist[0]) {
+        if (userExist) {
           return res.status(401).json({
             field: "email",
             error: "E-mail já esta cadastrado na aplicação."
@@ -99,9 +101,11 @@ const usersController = {
         const { id } = req.params;
         const { whatsapp } = req.body;
 
-        const userExist = await knex("users").where("users.id", Number(id));
+        const userExist = await knex("users")
+          .where("users.id", Number(id))
+          .first();
 
-        if (!userExist[0]) {
+        if (!userExist) {
           return res.status(404).json({
             field: "id",
             error: "Usuário não está cadastrado na aplicação."
