@@ -7,3 +7,5 @@
 [ ] - Criar rota para votação
 
 [ ] - Desacoplar códigos do controller
+
+[ ] - Refatorar database para sequelize
