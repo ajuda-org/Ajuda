@@ -22,6 +22,11 @@ const helpersController = {
             "requests_helpers.request_id",
             "requests.id"
           )
+          .join(
+            "requests_owners",
+            "requests_owners.request_id",
+            "requests.id"
+          )
           .where("requests_helpers.user_id", Number(userId))
           .whereIn("requests.status", parsedStatus)
           .distinct()
