@@ -17,6 +17,8 @@ const helpersController = {
           .map(item => Number(item.trim()));
 
         const requests = await knex("requests")
+          .join("requests_items", "requests_items.request_id", "requests.id")
+          .join("items", "items.id", "requests_items.item_id")
           .join(
             "requests_helpers",
             "requests_helpers.request_id",
@@ -27,10 +29,15 @@ const helpersController = {
             "requests_owners.request_id",
             "requests.id"
           )
+          .join(
+            "users",
+            "users.id",
+            "requests_owners.user_id"
+          )
           .where("requests_helpers.user_id", Number(userId))
           .whereIn("requests.status", parsedStatus)
           .distinct()
-          .select("requests.*");
+          .select("requests.*", "users.*", "items.*");
 
         return res.status(200).json(requests);
       },

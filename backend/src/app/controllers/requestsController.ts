@@ -17,10 +17,11 @@ const requestsController = {
 
         const requests = await knex("requests")
           .join("requests_items", "requests_items.request_id", "requests.id")
+          .join("items", "items.id", "requests_items.item_id")
           .whereIn("requests_items.item_id", parsedItems)
           .where("requests.status", 0)
           .distinct()
-          .select("requests.*");
+          .select("requests.*", "items.*");
 
         return res.status(200).json(requests);
       },
