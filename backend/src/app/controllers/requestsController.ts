@@ -5,20 +5,19 @@ import knex from "../../database/connection";
 const requestsController = {
   index: async (req: Request, res: Response): Promise<void> => {
     const schema = Yup.object().shape({
-      items: Yup.string().required("É obrigatório informar os ids dos items.")
+      status: Yup.string().required("É obrigatório informar o status do pedido.")
     });
 
     await schema.validate(req.query).then(
       async () => {
-        const { items } = req.query;
-        const parsedItems = String(items)
+        const { status } = req.query;
+        const parsedStatus = String(status)
           .split(",")
           .map(item => Number(item.trim()));
 
         const requests = await knex("requests")
           .join("requests_items", "requests_items.request_id", "requests.id")
-          .whereIn("requests_items.item_id", parsedItems)
-          .where("requests.status", 0)
+          .whereIn("requests.status", parsedStatus)
           .distinct()
           .select("requests.*");
 
