@@ -20,8 +20,8 @@ routes.get("/requests", requestsController.index);
 routes.get("/requests/:id", requestsController.show);
 routes.post("/requests", requestsController.create);
 
-routes.get("/request_help", helpersController.index);
-routes.post("/request_help", helpersController.create);
+routes.get("/request_helpers", helpersController.index);
+routes.post("/request_helpers", helpersController.create);
 
 routes.get("/items", itemsController.index);
 
