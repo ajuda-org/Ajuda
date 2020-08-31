@@ -6,7 +6,9 @@ const helpersController = {
   index: async (req: Request, res: Response): Promise<void> => {
     const schema = Yup.object().shape({
       userId: Yup.string().required("É obrigatório informar o id do ajudante."),
-      status: Yup.string().required("É obrigatório informar o status do pedido.")
+      status: Yup.string().required(
+        "É obrigatório informar o status do pedido."
+      )
     });
 
     await schema.validate(req.query).then(
@@ -24,16 +26,8 @@ const helpersController = {
             "requests_helpers.request_id",
             "requests.id"
           )
-          .join(
-            "requests_owners",
-            "requests_owners.request_id",
-            "requests.id"
-          )
-          .join(
-            "users",
-            "users.id",
-            "requests_owners.user_id"
-          )
+          .join("requests_owners", "requests_owners.request_id", "requests.id")
+          .join("users", "users.id", "requests_owners.user_id")
           .where("requests_helpers.user_id", Number(userId))
           .whereIn("requests.status", parsedStatus)
           .distinct()
