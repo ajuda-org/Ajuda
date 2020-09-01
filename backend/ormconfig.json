@@ -6,7 +6,7 @@
   "password": "ajuda",
   "database": "ajuda_db",
   "entities": [
-      "./src/models/*.ts"
+      "./src/app/models/*.ts"
   ],
   "migrations": [
       "./src/database/migrations/*.ts"
