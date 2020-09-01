@@ -8,4 +8,4 @@
 
 [ ] - Desacoplar códigos do controller
 
-[ ] - Refatorar database para sequelize
+[ ] - Refatorar database para TypeORM
