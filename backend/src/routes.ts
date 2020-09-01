@@ -4,7 +4,8 @@ import {
   usersController,
   itemsController,
   requestsController,
-  helpersController
+  helpersController,
+  ownersController
 } from "./app/controllers";
 
 const routes = Router();
@@ -22,6 +23,8 @@ routes.post("/requests", requestsController.create);
 
 routes.get("/helpers", helpersController.index);
 routes.post("/helpers", helpersController.create);
+
+routes.get("/owners", ownersController.index);
 
 routes.get("/items", itemsController.index);
 
