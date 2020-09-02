@@ -6,6 +6,8 @@ services:
     image: postgres
     restart: always
     environment:
-      POSTGRES_PASSWORD: example
+      POSTGRES_DB: ajuda_db
+      POSTGRES_USER: ajuda
+      POSTGRES_PASSWORD: ajuda
     ports:
       - 5432:5432
