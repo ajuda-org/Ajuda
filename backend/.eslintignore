@@ -1,3 +1,4 @@
 /*.js’
 node_modules
 dist
+src/database/migrations
