@@ -2,58 +2,8 @@ import { MigrationInterface, QueryRunner, Table } from "typeorm";
 
 export default class createUsers1599090504385 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.createTable(
-      new Table({
-        name: "users",
-        columns: [
-          {
-            name: "id",
-            type: "int",
-            isPrimary: true
-          },
-          {
-            name: "name",
-            type: "varchar",
-            isNullable: false
-          },
-          {
-            name: "cpf",
-            type: "varchar",
-            isNullable: false
-          },
-          {
-            name: "whatsapp",
-            type: "varchar",
-            isNullable: false
-          },
-          {
-            name: "type",
-            type: "varchar",
-            isNullable: false
-          },
-          {
-            name: "email",
-            type: "varchar",
-            isNullable: false,
-            isUnique: true
-          },
-          {
-            name: "password",
-            type: "varchar",
-            isNullable: false
-          },
-          {
-            name: "created_at",
-            type: "timestamp",
-            default: "now()"
-          },
-          {
-            name: "updated_at",
-            type: "timestamp",
-            default: "now()"
-          }
-        ]
-      })
+    await queryRunner.query(
+      `CREATE TABLE users ( id SERIAL PRIMARY KEY NOT NULL, name varchar(255) NOT NULL, cpf varchar(14) NOT NULL, whatsapp varchar(15) NOT NULL, type varchar(40) NOT NULL, email varchar(255) NOT NULL UNIQUE, password varchar(255) NOT NULL, created_at TIMESTAMP DEFAULT now(), updated_at TIMESTAMP DEFAULT now() )`,
     );
   };
 

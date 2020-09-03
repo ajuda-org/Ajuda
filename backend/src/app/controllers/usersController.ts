@@ -55,34 +55,26 @@ const usersController = {
     await schema.validate(req.body).then(
       async () => {
         const { name, cpf, whatsapp, type, email, password } = req.body;
-        const userExist = await knex("users")
-          .where("users.email", email)
-          .first();
+        // const userExist = await knex("users")
+        //   .where("users.email", email)
+        //   .first();
 
-        if (userExist) {
-          return res.status(401).json({
-            field: "email",
-            error: "E-mail já esta cadastrado na aplicação."
-          });
-        }
-
-        const encryptedPassword = await userService.encryptPassword(password);
-
-        const user = {
+        // if (userExist) {
+        //   return res.status(401).json({
+        //     field: "email",
+        //     error: "E-mail já esta cadastrado na aplicação."
+        //   });
+        // }
+        const user = await userService.create({
           name,
           cpf,
           whatsapp,
           type,
           email,
-          password: encryptedPassword
-        };
+          password
+        });
 
-        const trx = await knex.transaction();
-        const insertedId = await trx("users").insert(user);
-
-        await trx.commit();
-
-        return res.status(201).json({ user: { id: insertedId[0], ...user } });
+        return res.status(201).json(user);
       },
       ({ errors, path }) => {
         return res.status(422).json({ field: path, error: errors[0] });
