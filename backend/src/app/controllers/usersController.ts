@@ -57,7 +57,7 @@ const usersController = {
       async () => {
         const { name, cpf, whatsapp, type, email, password } = req.body;
 
-        const user = await userService.create({
+        const userServiceResponse = await userService.create({
           name,
           cpf,
           whatsapp,
@@ -66,14 +66,9 @@ const usersController = {
           password
         });
 
-        if (!user) {
-          return res.status(401).json({
-            field: "email",
-            error: "E-mail já esta cadastrado na aplicação."
-          });
-        }
-
-        return res.status(201).json(user);
+        return res
+          .status(userServiceResponse.status)
+          .json(userServiceResponse.userOrError);
       },
       ({ errors, path }) => {
         return res.status(422).json({ field: path, error: errors[0] });

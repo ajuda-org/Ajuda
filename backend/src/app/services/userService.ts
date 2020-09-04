@@ -1,6 +1,19 @@
 import { userRepository } from "../repositories";
 import { IUserInterface, IUserWithoutPassword } from "../interfaces";
 
+interface serviceResponseWithError {
+  status: number;
+  userOrError: {
+    field: string;
+    error: string;
+  };
+}
+
+interface serviceResponseWithUser {
+  status: number;
+  userOrError: IUserWithoutPassword[];
+}
+
 const userService = {
   removePassword: (object: Array<IUserInterface>): IUserWithoutPassword[] => {
     return object.map(({ password, ...rest }) => rest);
@@ -16,11 +29,19 @@ const userService = {
     type,
     email,
     password
-  }: IUserInterface): Promise<IUserWithoutPassword[] | boolean> => {
+  }: IUserInterface): Promise<
+    serviceResponseWithError | serviceResponseWithUser
+  > => {
     const userExist = await userRepository.userExist(email);
 
     if (userExist) {
-      return false;
+      return {
+        status: 401,
+        userOrError: {
+          field: "email",
+          error: "E-mail já esta cadastrado na aplicação."
+        }
+      };
     }
     const user = await userRepository.create(
       name,
@@ -30,8 +51,8 @@ const userService = {
       email,
       password
     );
-
-    return userService.removePassword([user]);
+    const usernew = userService.removePassword([user]);
+    return { status: 201, userOrError: usernew };
   }
 };
 
