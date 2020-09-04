@@ -19,10 +19,10 @@ const userRepositpry = {
     const userRepository = getRepository(User);
     const userExist = await userRepository.findOne({ email });
 
-    if (userExist !== undefined) {
+    if (userExist) {
       return false;
     }
-    console.log(cpf, whatsapp.length);
+
     const user = await userRepository.create({
       cpf,
       name,
