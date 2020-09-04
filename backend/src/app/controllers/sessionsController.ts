@@ -36,10 +36,7 @@ const sessionsController = {
           });
         }
 
-        const encryptedPassword = await userService.checkPassword(
-          userPassword,
-          userExist.password
-        );
+        const encryptedPassword = false;
 
         if (!encryptedPassword) {
           return res.status(401).json({

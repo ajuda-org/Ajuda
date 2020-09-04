@@ -1,9 +1,6 @@
-import bcrypt from "bcryptjs";
-import { getRepository } from "typeorm";
-import { User } from "../models";
-
 import { userRepositpry } from "../repositories";
 import { IUserInterface } from "../interfaces";
+import { User } from "../models";
 
 interface Request {
   name: string;
@@ -15,17 +12,6 @@ interface Request {
 }
 
 const userService = {
-  encryptPassword: async (password: string): Promise<string> => {
-    const encryptedPassword = await bcrypt.hash(password, 8);
-    return encryptedPassword;
-  },
-  checkPassword: async (
-    hashPassword: string,
-    password: string
-  ): Promise<boolean> => {
-    const isValid = bcrypt.compare(hashPassword, password);
-    return isValid;
-  },
   listAll: async (): Promise<IUserInterface[]> => {
     const users = await userRepositpry.listAllUsers();
     return users;
@@ -37,22 +23,15 @@ const userService = {
     type,
     email,
     password
-  }: Request): Promise<User> => {
-    const userRepository = getRepository(User);
-
-    const encryptedPassword = await userService.encryptPassword(password);
-
-    const user = userRepository.create({
-      id: 1,
+  }: Request): Promise<User | boolean> => {
+    const user = await userRepositpry.create(
       name,
       cpf,
       whatsapp,
       type,
       email,
-      password: encryptedPassword
-    });
-
-    await userRepository.save(user);
+      password
+    );
 
     return user;
   }

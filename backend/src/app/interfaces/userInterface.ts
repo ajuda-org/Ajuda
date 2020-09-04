@@ -1,8 +1,9 @@
 export default interface IUserInterface {
-  id: number;
+  id?: number;
   name: string;
   cpf: string;
   whatsapp: string;
-  email: string;
   type: string;
+  email: string;
+  password: string;
 }

@@ -3,11 +3,15 @@ import {
   Column,
   PrimaryGeneratedColumn,
   CreateDateColumn,
-  UpdateDateColumn
+  UpdateDateColumn,
+  BeforeInsert,
+  BaseEntity
 } from "typeorm";
 
+import bcrypt from "bcryptjs";
+
 @Entity("users")
-class User {
+class User extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -34,6 +38,18 @@ class User {
 
   @UpdateDateColumn()
   updated_at: Date;
+
+  @BeforeInsert()
+  private async encryptPassword(): Promise<void> {
+    if (this.password) {
+      this.password = await bcrypt.hash(this.password, 8);
+    }
+  }
+
+  // public checkPassword(hashPassword: string,password: string): Promise<boolean> {
+  //   const isValid = bcrypt.compare(hashPassword, password);
+  //   return isValid;
+  // }
 }
 
 export default User;

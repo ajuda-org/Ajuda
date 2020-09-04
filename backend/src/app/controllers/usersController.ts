@@ -29,6 +29,7 @@ const usersController = {
 
     return res.status(200).json(users);
   },
+
   create: async (req: Request, res: Response): Promise<void> => {
     const schema = Yup.object().shape({
       name: Yup.string().required("O campo nome não pode ficar em branco."),
@@ -55,16 +56,7 @@ const usersController = {
     await schema.validate(req.body).then(
       async () => {
         const { name, cpf, whatsapp, type, email, password } = req.body;
-        // const userExist = await knex("users")
-        //   .where("users.email", email)
-        //   .first();
 
-        // if (userExist) {
-        //   return res.status(401).json({
-        //     field: "email",
-        //     error: "E-mail já esta cadastrado na aplicação."
-        //   });
-        // }
         const user = await userService.create({
           name,
           cpf,
@@ -73,6 +65,13 @@ const usersController = {
           email,
           password
         });
+
+        if (!user) {
+          return res.status(401).json({
+            field: "email",
+            error: "E-mail já esta cadastrado na aplicação."
+          });
+        }
 
         return res.status(201).json(user);
       },
