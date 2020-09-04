@@ -1,20 +1,13 @@
-import { userRepositpry } from "../repositories";
-import { IUserInterface } from "../interfaces";
-import { User } from "../models";
-
-interface Request {
-  name: string;
-  cpf: string;
-  whatsapp: string;
-  type: string;
-  email: string;
-  password: string;
-}
+import { userRepository } from "../repositories";
+import { IUserInterface, IUserWithoutPassword } from "../interfaces";
 
 const userService = {
-  listAll: async (): Promise<IUserInterface[]> => {
-    const users = await userRepositpry.listAllUsers();
-    return users;
+  removePassword: (object: Array<IUserInterface>): IUserWithoutPassword[] => {
+    return object.map(({ password, ...rest }) => rest);
+  },
+  listAll: async (): Promise<IUserWithoutPassword[]> => {
+    const users = await userRepository.listAllUsers();
+    return userService.removePassword(users);
   },
   create: async ({
     name,
@@ -23,8 +16,13 @@ const userService = {
     type,
     email,
     password
-  }: Request): Promise<User | boolean> => {
-    const user = await userRepositpry.create(
+  }: IUserInterface): Promise<IUserWithoutPassword[] | boolean> => {
+    const userExist = await userRepository.userExist(email);
+
+    if (userExist) {
+      return false;
+    }
+    const user = await userRepository.create(
       name,
       cpf,
       whatsapp,
@@ -33,7 +31,7 @@ const userService = {
       password
     );
 
-    return user;
+    return userService.removePassword([user]);
   }
 };
 
