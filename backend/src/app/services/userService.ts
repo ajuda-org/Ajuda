@@ -22,6 +22,22 @@ const userService = {
     const users = await userRepository.listAllUsers();
     return userService.removePassword(users);
   },
+  showUserById: async (
+    id: string
+  ): Promise<serviceResponseWithError | serviceResponseWithUser> => {
+    const userExist = await userRepository.showUserById(id);
+    if (!userExist) {
+      return {
+        status: 404,
+        userOrError: {
+          field: "id",
+          error: "Usuário não está cadastrado na aplicação."
+        }
+      };
+    }
+    const userWithoutPass = userService.removePassword([userExist]);
+    return { status: 201, userOrError: userWithoutPass };
+  },
   create: async ({
     name,
     cpf,
@@ -51,8 +67,8 @@ const userService = {
       email,
       password
     );
-    const usernew = userService.removePassword([user]);
-    return { status: 201, userOrError: usernew };
+    const userWithoutPass = userService.removePassword([user]);
+    return { status: 201, userOrError: userWithoutPass };
   }
 };
 

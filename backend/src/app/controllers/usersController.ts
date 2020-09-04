@@ -7,27 +7,15 @@ import { userService } from "../services";
 const usersController = {
   index: async (req: Request, res: Response): Promise<Response> => {
     const users = await userService.listAll();
-
     return res.status(200).json(users);
   },
   show: async (req: Request, res: Response): Promise<Response> => {
     const { id } = req.params;
+    const userServiceResponse = await userService.showUserById(id);
 
-    const userExist = await knex("users").where("users.id", Number(id)).first();
-
-    if (!userExist) {
-      return res.status(404).json({
-        field: "id",
-        error: "Usuário não está cadastrado na aplicação."
-      });
-    }
-
-    const users = await knex("users")
-      .select("*")
-      .where("users.id", Number(id))
-      .first();
-
-    return res.status(200).json(users);
+    return res
+      .status(userServiceResponse.status)
+      .json(userServiceResponse.userOrError);
   },
 
   create: async (req: Request, res: Response): Promise<void> => {
