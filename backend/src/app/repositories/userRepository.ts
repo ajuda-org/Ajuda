@@ -30,6 +30,14 @@ const userRepository = {
     const user = await repository.findOne({ id: Number(id) });
     return user;
   },
+  showUserByEmailAndType: async (
+    email: string,
+    type: string
+  ): Promise<User | undefined> => {
+    const repository = userRepository.getRepo();
+    const user = await repository.findOne({ email, type });
+    return user;
+  },
 
   create: async (
     name: string,

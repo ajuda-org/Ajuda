@@ -1,18 +1,10 @@
 import { userRepository } from "../repositories";
-import { IUserInterface, IUserWithoutPassword } from "../interfaces";
-
-interface serviceResponseWithError {
-  status: number;
-  userOrError: {
-    field: string;
-    error: string;
-  };
-}
-
-interface serviceResponseWithUser {
-  status: number;
-  userOrError: IUserWithoutPassword[];
-}
+import {
+  IUserInterface,
+  IUserWithoutPassword,
+  IServiceResponseWithError,
+  IServiceResponseWithUser
+} from "../interfaces";
 
 const userService = {
   removePassword: (object: Array<IUserInterface>): IUserWithoutPassword[] => {
@@ -26,7 +18,7 @@ const userService = {
 
   showUserById: async (
     id: string
-  ): Promise<serviceResponseWithError | serviceResponseWithUser> => {
+  ): Promise<IServiceResponseWithError | IServiceResponseWithUser> => {
     const userExist = await userRepository.showUserById(id);
     if (!userExist) {
       return {
@@ -49,7 +41,7 @@ const userService = {
     email,
     password
   }: IUserInterface): Promise<
-    serviceResponseWithError | serviceResponseWithUser
+    IServiceResponseWithError | IServiceResponseWithUser
   > => {
     const userExist = await userRepository.userExist(email);
 
@@ -77,7 +69,7 @@ const userService = {
   updateById: async (
     id: string,
     whatsapp: string
-  ): Promise<serviceResponseWithError | serviceResponseWithUser> => {
+  ): Promise<IServiceResponseWithError | IServiceResponseWithUser> => {
     const userExist = await userRepository.userExistById(id);
     if (!userExist) {
       return {

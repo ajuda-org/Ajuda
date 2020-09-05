@@ -46,10 +46,10 @@ class User extends BaseEntity {
     }
   }
 
-  // public checkPassword(hashPassword: string,password: string): Promise<boolean> {
-  //   const isValid = bcrypt.compare(hashPassword, password);
-  //   return isValid;
-  // }
+  async checkPassword(hashPassword: string): Promise<boolean> {
+    const isValid = await bcrypt.compare(hashPassword, this.password);
+    return isValid;
+  }
 }
 
 export default User;
