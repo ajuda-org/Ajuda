@@ -1,53 +1,9 @@
-import { MigrationInterface, QueryRunner, Table } from "typeorm";
+import { MigrationInterface, QueryRunner } from "typeorm";
 
 export class createRequests1599092676409 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.createTable(
-      new Table({
-        name: "requests",
-        columns: [
-          {
-            name: "id",
-            type: "int",
-            isPrimary: true
-          },
-          {
-            name: "title",
-            type: "varchar",
-            isNullable: false
-          },
-          {
-            name: "description",
-            type: "varchar",
-            isNullable: false
-          },
-          {
-            name: "status",
-            type: "int",
-            isNullable: false
-          },
-          {
-            name: "latitude",
-            type: "varchar",
-            isNullable: false
-          },
-          {
-            name: "longitude",
-            type: "varchar",
-            isNullable: false,
-          },
-          {
-            name: "created_at",
-            type: "timestamp",
-            default: "now()"
-          },
-          {
-            name: "updated_at",
-            type: "timestamp",
-            default: "now()"
-          }
-        ]
-      })
+    await queryRunner.query(
+      `CREATE TABLE requests ( id SERIAL PRIMARY KEY NOT NULL, title varchar(255) NOT NULL, description text NOT NULL, status int NOT NULL DEFAULT 0, latitude varchar(255) NOT NULL, longitude varchar(255) NOT NULL, created_at TIMESTAMP DEFAULT now(), updated_at TIMESTAMP DEFAULT now() )`,
     );
   };
 
