@@ -1,53 +1,10 @@
-import { MigrationInterface, QueryRunner, Table, TableForeignKey } from "typeorm";
+import { MigrationInterface, QueryRunner } from "typeorm";
 
 export class createRequestsOwners1599093458256 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.createTable(
-      new Table({
-        name: "requests_owners",
-        columns: [
-          {
-            name: "id",
-            type: "int",
-            isPrimary: true
-          },
-          {
-            name: "request_id",
-            type: "int",
-            isNullable: false
-          },
-          {
-            name: "user_id",
-            type: "int",
-            isNullable: false
-          },
-          {
-            name: "created_at",
-            type: "timestamp",
-            default: "now()"
-          },
-          {
-            name: "updated_at",
-            type: "timestamp",
-            default: "now()"
-          }
-        ]
-      })
+    await queryRunner.query(
+      `CREATE TABLE requests_owners ( id SERIAL PRIMARY KEY NOT NULL, request_id int NOT NULL, user_id int NOT NULL, created_at TIMESTAMP DEFAULT now(), updated_at TIMESTAMP DEFAULT now(), CONSTRAINT fk_request_id FOREIGN KEY(request_id) REFERENCES requests(id), CONSTRAINT fk_user_id FOREIGN KEY(user_id) REFERENCES users(id) )`,
     );
-
-    await queryRunner.createForeignKey("requests_owners", new TableForeignKey({
-      columnNames: ["request_id"],
-      referencedColumnNames: ["id"],
-      referencedTableName: "requests",
-      onDelete: "CASCADE"
-    }));
-
-    await queryRunner.createForeignKey("requests_owners", new TableForeignKey({
-      columnNames: ["user_id"],
-      referencedColumnNames: ["id"],
-      referencedTableName: "users",
-      onDelete: "CASCADE"
-    }));
   };
 
   public async down(queryRunner: QueryRunner): Promise<void> {
