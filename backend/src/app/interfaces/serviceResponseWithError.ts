@@ -1,6 +1,6 @@
 export default interface serviceResponseWithError {
   status: number;
-  userOrError: {
+  entityOrError: {
     field: string;
     error: string;
   };

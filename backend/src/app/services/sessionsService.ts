@@ -20,7 +20,7 @@ const sessionsService = {
     if (!userExist) {
       return {
         status: 401,
-        userOrError: {
+        entityOrError: {
           field: "email",
           error: "E-mail não esta cadastrado na aplicação."
         }
@@ -32,7 +32,7 @@ const sessionsService = {
     if (!encryptedPassword) {
       return {
         status: 401,
-        userOrError: {
+        entityOrError: {
           field: "password",
           error: "Senha informada esta incorreta."
         }
@@ -40,7 +40,7 @@ const sessionsService = {
     }
 
     const userWithoutPass = userService.removePassword([userExist]);
-    return { status: 200, userOrError: userWithoutPass };
+    return { status: 200, entityOrError: userWithoutPass };
   }
 };
 

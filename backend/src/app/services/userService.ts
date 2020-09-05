@@ -23,14 +23,14 @@ const userService = {
     if (!userExist) {
       return {
         status: 404,
-        userOrError: {
+        entityOrError: {
           field: "id",
           error: "Usuário não está cadastrado na aplicação."
         }
       };
     }
     const userWithoutPass = userService.removePassword([userExist]);
-    return { status: 201, userOrError: userWithoutPass };
+    return { status: 201, entityOrError: userWithoutPass };
   },
 
   create: async ({
@@ -48,7 +48,7 @@ const userService = {
     if (userExist) {
       return {
         status: 401,
-        userOrError: {
+        entityOrError: {
           field: "email",
           error: "E-mail já esta cadastrado na aplicação."
         }
@@ -63,7 +63,7 @@ const userService = {
       password
     );
     const userWithoutPass = userService.removePassword([user]);
-    return { status: 201, userOrError: userWithoutPass };
+    return { status: 201, entityOrError: userWithoutPass };
   },
 
   updateById: async (
@@ -74,7 +74,7 @@ const userService = {
     if (!userExist) {
       return {
         status: 404,
-        userOrError: {
+        entityOrError: {
           field: "id",
           error: "Usuário não está cadastrado na aplicação."
         }
@@ -85,7 +85,7 @@ const userService = {
 
     return {
       status: 201,
-      userOrError: userWithoutPass.map(user => {
+      entityOrError: userWithoutPass.map(user => {
         return { ...user, whatsapp };
       })
     };

@@ -31,7 +31,7 @@ const sessionsController = {
 
         return res
           .status(userServiceResponse.status)
-          .json(userServiceResponse.userOrError);
+          .json(userServiceResponse.entityOrError);
       },
       ({ errors, path }) => {
         return res.status(422).json({ field: path, error: errors[0] });
