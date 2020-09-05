@@ -18,10 +18,12 @@ const userService = {
   removePassword: (object: Array<IUserInterface>): IUserWithoutPassword[] => {
     return object.map(({ password, ...rest }) => rest);
   },
+
   listAll: async (): Promise<IUserWithoutPassword[]> => {
     const users = await userRepository.listAllUsers();
     return userService.removePassword(users);
   },
+
   showUserById: async (
     id: string
   ): Promise<serviceResponseWithError | serviceResponseWithUser> => {
@@ -38,6 +40,7 @@ const userService = {
     const userWithoutPass = userService.removePassword([userExist]);
     return { status: 201, userOrError: userWithoutPass };
   },
+
   create: async ({
     name,
     cpf,
@@ -69,6 +72,31 @@ const userService = {
     );
     const userWithoutPass = userService.removePassword([user]);
     return { status: 201, userOrError: userWithoutPass };
+  },
+
+  updateById: async (
+    id: string,
+    whatsapp: string
+  ): Promise<serviceResponseWithError | serviceResponseWithUser> => {
+    const userExist = await userRepository.userExistById(id);
+    if (!userExist) {
+      return {
+        status: 404,
+        userOrError: {
+          field: "id",
+          error: "Usuário não está cadastrado na aplicação."
+        }
+      };
+    }
+    await userRepository.updateById(id, whatsapp);
+    const userWithoutPass = userService.removePassword([userExist]);
+
+    return {
+      status: 201,
+      userOrError: userWithoutPass.map(user => {
+        return { ...user, whatsapp };
+      })
+    };
   }
 };
 

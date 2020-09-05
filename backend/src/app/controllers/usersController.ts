@@ -1,6 +1,5 @@
 import * as Yup from "yup";
 import { Request, Response } from "express";
-import knex from "../../database/connection";
 
 import { userService } from "../services";
 
@@ -9,6 +8,7 @@ const usersController = {
     const users = await userService.listAll();
     return res.status(200).json(users);
   },
+
   show: async (req: Request, res: Response): Promise<Response> => {
     const { id } = req.params;
     const userServiceResponse = await userService.showUserById(id);
@@ -63,6 +63,7 @@ const usersController = {
       }
     );
   },
+
   update: async (req: Request, res: Response): Promise<void> => {
     const schema = Yup.object().shape({
       whatsapp: Yup.string()
@@ -75,25 +76,11 @@ const usersController = {
         const { id } = req.params;
         const { whatsapp } = req.body;
 
-        const userExist = await knex("users")
-          .where("users.id", Number(id))
-          .first();
+        const userServiceResponse = await userService.updateById(id, whatsapp);
 
-        if (!userExist) {
-          return res.status(404).json({
-            field: "id",
-            error: "Usuário não está cadastrado na aplicação."
-          });
-        }
-
-        const trx = await knex.transaction();
-        const updatedId = await trx("users")
-          .where({ id })
-          .update("whatsapp", whatsapp);
-
-        await trx.commit();
-
-        return res.status(200).json({ updatedId });
+        return res
+          .status(userServiceResponse.status)
+          .json(userServiceResponse.userOrError);
       },
       ({ errors, path }) => {
         return res.status(422).json({ field: path, error: errors[0] });
