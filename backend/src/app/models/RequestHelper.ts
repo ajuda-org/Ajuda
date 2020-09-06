@@ -20,13 +20,13 @@ class RequestHelper extends BaseEntity {
   id: number;
 
   @Column("integer")
-  request_id: string;
+  request_id: number;
 
   @Column("integer")
-  user_id: string;
+  user_id: number;
 
   @Column("integer")
-  status: string;
+  status: number;
 
   @ManyToOne(() => User)
   @JoinColumn({ name: "user_id" })

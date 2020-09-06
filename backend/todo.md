@@ -4,7 +4,7 @@
 
 [√] - Desacoplar códigos do controller
 
-[ ] - Criar rota para confirmar ajudante
+[√] - Criar rota para confirmar ajudante
 
 [ ] - Criar rota para encerrar pedido
 

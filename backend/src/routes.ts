@@ -25,6 +25,7 @@ routes.get("/helpers", helpersController.index);
 routes.post("/helpers", helpersController.create);
 
 routes.get("/owners", ownersController.index);
+routes.put("/owners/:requestId", ownersController.update);
 
 routes.get("/items", itemsController.index);
 

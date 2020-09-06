@@ -1,4 +1,4 @@
-import { getRepository, Repository, In, Not } from "typeorm";
+import { getRepository, Repository, In, Not, UpdateResult } from "typeorm";
 import { Request, User } from "../models";
 import { IRequest } from "../interfaces";
 
@@ -15,6 +15,19 @@ const requestsRepository = {
     const repository = requestsRepository.getRepo();
     const requestAvaliable = await repository.findOne({
       id: Number(id),
+      status: 0
+    });
+    return requestAvaliable;
+  },
+
+  RequestAvaliableByIdAndOwner: async (
+    id: string,
+    ownerId: string
+  ): Promise<Request | undefined> => {
+    const repository = requestsRepository.getRepo();
+    const requestAvaliable = await repository.findOne({
+      id: Number(id),
+      owner_id: Number(ownerId),
       status: 0
     });
     return requestAvaliable;
@@ -69,13 +82,21 @@ const requestsRepository = {
       description,
       latitude,
       longitude,
-      item_id,
-      owner_id
+      item_id: Number(item_id),
+      owner_id: Number(owner_id)
     });
 
     await repository.save(request);
 
     return request;
+  },
+
+  update: async (requestId: string): Promise<UpdateResult> => {
+    const repository = requestsRepository.getRepo();
+    const updatedRequest = await repository.update(requestId, {
+      status: 1
+    });
+    return updatedRequest;
   }
 };
 

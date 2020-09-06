@@ -35,10 +35,10 @@ class Request extends BaseEntity {
   longitude: string;
 
   @Column()
-  owner_id: string;
+  owner_id: number;
 
   @Column()
-  item_id: string;
+  item_id: number;
 
   @ManyToOne(() => User)
   @JoinColumn({ name: "owner_id" })
