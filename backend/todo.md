@@ -13,3 +13,5 @@
 [ ] - Configuração de seeds
 
 [ ] - Troca de objetos para classe (controller, services, repo)
+
+[ ] - Verificar melhorias na escrutura e na separação de códigos
