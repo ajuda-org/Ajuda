@@ -30,7 +30,7 @@ class User extends BaseEntity {
   @Column("varchar")
   email: string;
 
-  @Column("varchar")
+  @Column({ select: false })
   password: string;
 
   @CreateDateColumn()

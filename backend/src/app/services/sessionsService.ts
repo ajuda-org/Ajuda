@@ -5,8 +5,6 @@ import {
   ISession
 } from "../interfaces";
 
-import userService from "./userService";
-
 const sessionsService = {
   create: async ({
     email,
@@ -39,8 +37,7 @@ const sessionsService = {
       };
     }
 
-    const userWithoutPass = userService.removePassword([userExist]);
-    return { status: 200, entityOrError: userWithoutPass };
+    return { status: 200, entityOrError: [userExist] };
   }
 };
 

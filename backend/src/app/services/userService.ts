@@ -7,13 +7,9 @@ import {
 } from "../interfaces";
 
 const userService = {
-  removePassword: (object: Array<IUserInterface>): IUserWithoutPassword[] => {
-    return object.map(({ password, ...rest }) => rest);
-  },
-
   listAll: async (): Promise<IUserWithoutPassword[]> => {
     const users = await userRepository.listAllUsers();
-    return userService.removePassword(users);
+    return users;
   },
 
   showUserById: async (
@@ -29,8 +25,8 @@ const userService = {
         }
       };
     }
-    const userWithoutPass = userService.removePassword([userExist]);
-    return { status: 201, entityOrError: userWithoutPass };
+
+    return { status: 201, entityOrError: [userExist] };
   },
 
   create: async ({
@@ -62,8 +58,8 @@ const userService = {
       email,
       password
     );
-    const userWithoutPass = userService.removePassword([user]);
-    return { status: 201, entityOrError: userWithoutPass };
+
+    return { status: 201, entityOrError: [user] };
   },
 
   updateById: async (
@@ -81,14 +77,8 @@ const userService = {
       };
     }
     await userRepository.updateById(id, whatsapp);
-    const userWithoutPass = userService.removePassword([userExist]);
 
-    return {
-      status: 201,
-      entityOrError: userWithoutPass.map(user => {
-        return { ...user, whatsapp };
-      })
-    };
+    return { status: 201, entityOrError: [userExist] };
   }
 };
 
