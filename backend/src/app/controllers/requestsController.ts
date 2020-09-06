@@ -1,116 +1,68 @@
 import * as Yup from "yup";
 import { Request, Response } from "express";
-import knex from "../../database/connection";
+import { requestsService } from "../services";
 
 const requestsController = {
-  index: async (req: Request, res: Response): Promise<void> => {
-    const schema = Yup.object().shape({
-      items: Yup.string().required("É obrigatório informar os ids dos items.")
-    });
-
-    await schema.validate(req.query).then(
-      async () => {
-        const { items } = req.query;
-        const parsedItems = String(items)
-          .split(",")
-          .map(item => Number(item.trim()));
-
-        const requests = await knex("requests")
-          .join("requests_items", "requests_items.request_id", "requests.id")
-          .join("items", "items.id", "requests_items.item_id")
-          .whereIn("requests_items.item_id", parsedItems)
-          .where("requests.status", 0)
-          .distinct()
-          .select("requests.*", "items.*");
-
-        return res.status(200).json(requests);
-      },
-      ({ errors, path }) => {
-        return res.status(422).json({ field: path, error: errors[0] });
-      }
-    );
+  index: async (req: Request, res: Response): Promise<Response> => {
+    const { itemsId } = req.body;
+    const requests = await requestsService.listAll(itemsId);
+    return res.status(200).json(requests);
   },
 
   show: async (req: Request, res: Response): Promise<Response> => {
     const { id } = req.params;
 
-    const requests = await knex("requests")
-      .where("requests.id", Number(id))
-      .first();
+    const requestsServiceResponse = await requestsService.showUserById(id);
 
-    if (!requests) {
-      return res.status(404).json({
-        field: "id",
-        error: "O pedido informado não existe."
-      });
-    }
-
-    const item = await knex("items")
-      .join("requests_items", "requests_items.item_id", "items.id")
-      .where("requests_items.request_id", id)
-      .select("items.name", "items.image")
-      .first();
-
-    return res.status(200).json({ requests, item });
+    return res
+      .status(requestsServiceResponse.status)
+      .json(requestsServiceResponse.entityOrError);
   },
+
   create: async (req: Request, res: Response): Promise<void> => {
     const schema = Yup.object().shape({
       title: Yup.string().required("O campo titulo não pode ficar em branco."),
       description: Yup.string().required(
         "O campo descrição não pode ficar em branco."
       ),
-      itemId: Yup.string().required(
-        "Não é possível criar um pedido sem o tipo de ajuda."
-      ),
+      itemId: Yup.string()
+        .required("Não é possível criar um pedido sem o tipo de ajuda.")
+        .oneOf(
+          ["1", "2", "3", "4", "5", "6"],
+          "O id do item deve ser entre 1 a 6."
+        ),
       latitude: Yup.string().required(
         "O campo latitude não pode ficar em branco."
       ),
       longitude: Yup.string().required(
         "O campo longitude não pode ficar em branco."
-      )
+      ),
+      userId: Yup.string().required("O campo userId não pode ficar em branco.")
     });
 
     await schema.validate(req.body).then(
       async () => {
-        const { title, description, latitude, longitude, itemId } = req.body;
-        const { id } = req.headers;
-        const request = {
+        const {
           title,
           description,
           latitude,
           longitude,
-          status: 0
-        };
+          itemId,
+          userId
+        } = req.body;
 
-        const userIsHelped = await knex("users")
-          .where("users.id", id)
-          .where("users.type", "helped")
-          .first();
-
-        if (!userIsHelped) {
-          return res.status(401).json({
-            field: "type",
-            error:
-              "Não é possivel criar o pedido, pois o usuário não é do tipo 'Ajudado'."
-          });
-        }
-
-        const trx = await knex.transaction();
-        const insertedId = await trx("requests").insert(request);
-
-        const requestId = insertedId[0];
-
-        const requestsOwners = { request_id: requestId, user_id: id };
-        await trx("requests_owners").insert(requestsOwners);
-
-        const requestsItems = { request_id: requestId, item_id: itemId };
-        await trx("requests_items").insert(requestsItems);
-
-        await trx.commit();
+        const requestsServiceResponse = await requestsService.create({
+          title,
+          description,
+          latitude,
+          longitude,
+          item_id: itemId,
+          owner_id: userId
+        });
 
         return res
-          .status(201)
-          .json({ user: { id: insertedId[0], ...request } });
+          .status(requestsServiceResponse.status)
+          .json(requestsServiceResponse.entityOrError);
       },
       ({ errors, path }) => {
         return res.status(422).json({ field: path, error: errors[0] });

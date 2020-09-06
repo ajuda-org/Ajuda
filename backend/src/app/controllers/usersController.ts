@@ -1,34 +1,23 @@
 import * as Yup from "yup";
 import { Request, Response } from "express";
-import knex from "../../database/connection";
 
 import { userService } from "../services";
 
 const usersController = {
   index: async (req: Request, res: Response): Promise<Response> => {
     const users = await userService.listAll();
-
     return res.status(200).json(users);
   },
+
   show: async (req: Request, res: Response): Promise<Response> => {
     const { id } = req.params;
+    const userServiceResponse = await userService.showUserById(id);
 
-    const userExist = await knex("users").where("users.id", Number(id)).first();
-
-    if (!userExist) {
-      return res.status(404).json({
-        field: "id",
-        error: "Usuário não está cadastrado na aplicação."
-      });
-    }
-
-    const users = await knex("users")
-      .select("*")
-      .where("users.id", Number(id))
-      .first();
-
-    return res.status(200).json(users);
+    return res
+      .status(userServiceResponse.status)
+      .json(userServiceResponse.entityOrError);
   },
+
   create: async (req: Request, res: Response): Promise<void> => {
     const schema = Yup.object().shape({
       name: Yup.string().required("O campo nome não pode ficar em branco."),
@@ -55,40 +44,26 @@ const usersController = {
     await schema.validate(req.body).then(
       async () => {
         const { name, cpf, whatsapp, type, email, password } = req.body;
-        const userExist = await knex("users")
-          .where("users.email", email)
-          .first();
 
-        if (userExist) {
-          return res.status(401).json({
-            field: "email",
-            error: "E-mail já esta cadastrado na aplicação."
-          });
-        }
-
-        const encryptedPassword = await userService.encryptPassword(password);
-
-        const user = {
+        const userServiceResponse = await userService.create({
           name,
           cpf,
           whatsapp,
           type,
           email,
-          password: encryptedPassword
-        };
+          password
+        });
 
-        const trx = await knex.transaction();
-        const insertedId = await trx("users").insert(user);
-
-        await trx.commit();
-
-        return res.status(201).json({ user: { id: insertedId[0], ...user } });
+        return res
+          .status(userServiceResponse.status)
+          .json(userServiceResponse.entityOrError);
       },
       ({ errors, path }) => {
         return res.status(422).json({ field: path, error: errors[0] });
       }
     );
   },
+
   update: async (req: Request, res: Response): Promise<void> => {
     const schema = Yup.object().shape({
       whatsapp: Yup.string()
@@ -101,25 +76,11 @@ const usersController = {
         const { id } = req.params;
         const { whatsapp } = req.body;
 
-        const userExist = await knex("users")
-          .where("users.id", Number(id))
-          .first();
+        const userServiceResponse = await userService.updateById(id, whatsapp);
 
-        if (!userExist) {
-          return res.status(404).json({
-            field: "id",
-            error: "Usuário não está cadastrado na aplicação."
-          });
-        }
-
-        const trx = await knex.transaction();
-        const updatedId = await trx("users")
-          .where({ id })
-          .update("whatsapp", whatsapp);
-
-        await trx.commit();
-
-        return res.status(200).json({ updatedId });
+        return res
+          .status(userServiceResponse.status)
+          .json(userServiceResponse.entityOrError);
       },
       ({ errors, path }) => {
         return res.status(422).json({ field: path, error: errors[0] });

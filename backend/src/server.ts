@@ -1,3 +1,5 @@
+import "reflect-metadata";
+import "./database";
 import express from "express";
 import path from "path";
 

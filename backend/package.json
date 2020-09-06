@@ -6,8 +6,7 @@
   "author": "Henrique Schmeller",
   "scripts": {
     "dev": "ts-node-dev --ignore-watch node_modules src/server.ts",
-    "knex:migrate": "knex --knexfile knexfile.ts migrate:latest",
-    "knex:seed": "knex --knexfile knexfile.ts seed:run"
+    "typeorm": "ts-node-dev ./node_modules/typeorm/cli.js"
   },
   "dependencies": {
     "@types/bcryptjs": "^2.4.2",
@@ -15,8 +14,10 @@
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "express": "^4.17.1",
-    "knex": "^0.21.5",
+    "pg": "^8.3.3",
+    "reflect-metadata": "^0.1.13",
     "sqlite3": "^5.0.0",
+    "typeorm": "^0.2.25",
     "yup": "^0.29.3"
   },
   "devDependencies": {
