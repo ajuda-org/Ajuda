@@ -2,7 +2,7 @@ import * as Yup from "yup";
 import { Request, Response } from "express";
 import { requestsOwnerService } from "../services";
 
-const helpedController = {
+const requestsOwnersController = {
   index: async (req: Request, res: Response): Promise<void> => {
     const schema = Yup.object().shape({
       ownerId: Yup.string().required(
@@ -27,4 +27,4 @@ const helpedController = {
   }
 };
 
-export default helpedController;
+export default requestsOwnersController;
