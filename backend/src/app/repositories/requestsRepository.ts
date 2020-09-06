@@ -11,6 +11,15 @@ const requestsRepository = {
     return getRepository(User);
   },
 
+  RequestAvaliableById: async (id: string): Promise<Request | undefined> => {
+    const repository = requestsRepository.getRepo();
+    const requestAvaliable = await repository.findOne({
+      id: Number(id),
+      status: 0
+    });
+    return requestAvaliable;
+  },
+
   listAllRequests: async (itemsId: string[]): Promise<Request[]> => {
     const repository = requestsRepository.getRepo();
     let itemsQuery;

@@ -5,12 +5,14 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   ManyToOne,
+  ManyToMany,
   JoinColumn,
   BaseEntity
 } from "typeorm";
 
 import User from "./User";
 import Item from "./Item";
+import RequestHelper from "./RequestHelper";
 
 @Entity("requests")
 class Request extends BaseEntity {
@@ -45,6 +47,9 @@ class Request extends BaseEntity {
   @ManyToOne(() => Item)
   @JoinColumn({ name: "item_id" })
   item: Item;
+
+  @ManyToMany(type => RequestHelper, requesthelper => requesthelper.requests)
+  helpers: RequestHelper[];
 
   @CreateDateColumn()
   created_at: Date;

@@ -13,6 +13,24 @@ const userRepository = {
     return !!userExist;
   },
 
+  userIsHelped: async (userId: string): Promise<boolean> => {
+    const repository = userRepository.getRepo();
+    const userExist = await repository.findOne({
+      id: Number(userId),
+      type: "helped"
+    });
+    return !!userExist;
+  },
+
+  userIsHelper: async (userId: string): Promise<boolean> => {
+    const repository = userRepository.getRepo();
+    const userExist = await repository.findOne({
+      id: Number(userId),
+      type: "helper"
+    });
+    return !!userExist;
+  },
+
   userExistById: async (id: string): Promise<User | undefined> => {
     const repository = userRepository.getRepo();
     const userExist = await repository.findOne({ id: Number(id) });
