@@ -1,6 +1,5 @@
 import * as Yup from "yup";
 import { Request, Response } from "express";
-import knex from "../../database/connection";
 import { requestsService } from "../services";
 
 const requestsController = {
@@ -12,24 +11,11 @@ const requestsController = {
   show: async (req: Request, res: Response): Promise<Response> => {
     const { id } = req.params;
 
-    const requests = await knex("requests")
-      .where("requests.id", Number(id))
-      .first();
+    const requestsServiceResponse = await requestsService.showUserById(id);
 
-    if (!requests) {
-      return res.status(404).json({
-        field: "id",
-        error: "O pedido informado não existe."
-      });
-    }
-
-    const item = await knex("items")
-      .join("requests_items", "requests_items.item_id", "items.id")
-      .where("requests_items.request_id", id)
-      .select("items.name", "items.image")
-      .first();
-
-    return res.status(200).json({ requests, item });
+    return res
+      .status(requestsServiceResponse.status)
+      .json(requestsServiceResponse.entityOrError);
   },
 
   create: async (req: Request, res: Response): Promise<void> => {
@@ -70,7 +56,7 @@ const requestsController = {
           latitude,
           longitude,
           item_id: itemId,
-          user_id: userId
+          owner_id: userId
         });
 
         return res

@@ -30,6 +30,7 @@ const userRepository = {
     const user = await repository.findOne({ id: Number(id) });
     return user;
   },
+
   showUserByEmailAndType: async (
     email: string,
     type: string

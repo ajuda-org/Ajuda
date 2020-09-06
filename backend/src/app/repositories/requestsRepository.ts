@@ -17,6 +17,15 @@ const requestsRepository = {
     return allRequests;
   },
 
+  showRequestById: async (id: string): Promise<Request | undefined> => {
+    const repository = requestsRepository.getRepo();
+    const request = await repository.find({
+      where: { id: Number(id) },
+      relations: ["owner", "item"]
+    });
+    return request[0];
+  },
+
   userIsHelped: async (userId: string): Promise<boolean> => {
     const repository = requestsRepository.getUserRepo();
     const userExist = await repository.findOne({
@@ -32,7 +41,7 @@ const requestsRepository = {
     latitude,
     longitude,
     item_id,
-    user_id
+    owner_id
   }: IRequest): Promise<Request> => {
     const repository = requestsRepository.getRepo();
 
@@ -42,7 +51,7 @@ const requestsRepository = {
       latitude,
       longitude,
       item_id,
-      owner_id: user_id
+      owner_id
     });
 
     await repository.save(request);

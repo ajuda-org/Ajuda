@@ -5,10 +5,29 @@ import {
   IRequest
 } from "../interfaces";
 
+import { Request } from "../models";
+
 const requestsService = {
-  listAll: async (): Promise<IRequest[]> => {
-    const users = await requestsRepository.listAllRequests();
-    return users;
+  listAll: async (): Promise<Request[]> => {
+    const requests = await requestsRepository.listAllRequests();
+    return requests;
+  },
+
+  showUserById: async (
+    id: string
+  ): Promise<IServiceResponseWithError | IServiceResponseWithRequest> => {
+    const RequestExist = await requestsRepository.showRequestById(id);
+    if (!RequestExist) {
+      return {
+        status: 404,
+        entityOrError: {
+          field: "id",
+          error: "O pedido informado não existe."
+        }
+      };
+    }
+
+    return { status: 201, entityOrError: RequestExist };
   },
 
   create: async ({
@@ -17,11 +36,11 @@ const requestsService = {
     latitude,
     longitude,
     item_id,
-    user_id
+    owner_id
   }: IRequest): Promise<
     IServiceResponseWithError | IServiceResponseWithRequest
   > => {
-    const userIsHelped = await requestsRepository.userIsHelped(user_id);
+    const userIsHelped = await requestsRepository.userIsHelped(owner_id);
 
     if (!userIsHelped) {
       return {
@@ -40,7 +59,7 @@ const requestsService = {
       latitude,
       longitude,
       item_id,
-      user_id
+      owner_id
     });
 
     return { status: 201, entityOrError: createRequest };
