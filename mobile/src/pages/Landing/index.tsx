@@ -23,12 +23,12 @@ function Landing() {
   const { navigate } = useNavigation();
   const [totalConnections, setTotalConnections] = useState(128);
 
-  function handleNavigateToGiveClassesPage() {
-    navigate("helperLogon");
+  function handleNavigateToHelper() {
+    navigate("Logon", { profile: "Helper" });
   }
 
-  function handleNavigateToStudyPages() {
-    navigate("helpedLogon");
+  function handleNavigateToHelped() {
+    navigate("Logon", { profile: "Helped" });
   }
 
   return (
@@ -44,14 +44,14 @@ function Landing() {
 
       <ButtonsContainer>
         <ButtonPrimary
-          onPress={handleNavigateToStudyPages}
+          onPress={handleNavigateToHelped}
         >
           <Image source={helpedIcon} />
           <ButtonText>Receber Ajuda</ButtonText>
         </ButtonPrimary>
 
         <ButtonSecondary
-          onPress={handleNavigateToGiveClassesPage}
+          onPress={handleNavigateToHelper}
         >
           <Image source={helperIcon} />
           <ButtonText>Ajudar</ButtonText>
