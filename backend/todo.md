@@ -2,7 +2,7 @@
 
 [√] - Refatorar database para TypeORM
 
-[ ] - Desacoplar códigos do controller
+[√] - Desacoplar códigos do controller
 
 [ ] - Criar rota para confirmar ajudante
 
