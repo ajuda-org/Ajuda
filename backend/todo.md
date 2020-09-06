@@ -15,3 +15,5 @@
 [ ] - Troca de objetos para classe (controller, services, repo)
 
 [ ] - Verificar melhorias na escrutura e na separação de códigos
+
+[ ] - Verificar regras para remover do ESLint
