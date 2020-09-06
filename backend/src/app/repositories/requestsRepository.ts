@@ -1,4 +1,4 @@
-import { getRepository, Repository } from "typeorm";
+import { getRepository, Repository, In, Not } from "typeorm";
 import { Request, User } from "../models";
 import { IRequest } from "../interfaces";
 
@@ -11,9 +11,19 @@ const requestsRepository = {
     return getRepository(User);
   },
 
-  listAllRequests: async (): Promise<Request[]> => {
+  listAllRequests: async (itemsId: string[]): Promise<Request[]> => {
     const repository = requestsRepository.getRepo();
-    const allRequests = await repository.find({ relations: ["owner", "item"] });
+    let itemsQuery;
+    if (itemsId.length > 0) {
+      itemsQuery = In(itemsId);
+    } else {
+      itemsQuery = Not("0");
+    }
+
+    const allRequests = await repository.find({
+      where: { status: 0, item_id: itemsQuery },
+      relations: ["owner", "item"]
+    });
     return allRequests;
   },
 

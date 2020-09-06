@@ -4,7 +4,8 @@ import { requestsService } from "../services";
 
 const requestsController = {
   index: async (req: Request, res: Response): Promise<Response> => {
-    const requests = await requestsService.listAll();
+    const { itemsId } = req.body;
+    const requests = await requestsService.listAll(itemsId);
     return res.status(200).json(requests);
   },
 

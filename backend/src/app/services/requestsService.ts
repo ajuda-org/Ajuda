@@ -8,8 +8,8 @@ import {
 import { Request } from "../models";
 
 const requestsService = {
-  listAll: async (): Promise<Request[]> => {
-    const requests = await requestsRepository.listAllRequests();
+  listAll: async (itemId: string[]): Promise<Request[]> => {
+    const requests = await requestsRepository.listAllRequests(itemId);
     return requests;
   },
 
