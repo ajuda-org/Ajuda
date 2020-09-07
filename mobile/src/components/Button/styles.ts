@@ -7,7 +7,7 @@ interface IButton {
 export const ButtonContainer = styled.TouchableOpacity<IButton>`
   background: ${ props => props.backgroundColor };
   height: 60px;
-  width: 90%;
+  width: 100%;
   justify-content: center;
   align-items: center;
   border-radius: 30px;

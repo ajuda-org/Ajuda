@@ -14,14 +14,13 @@ export const Container = styled.View`
 `;
 
 export const Slider = styled.View<BackgroundColor>`
-  height: ${ 0.61 * height }px;
+  height: ${ 0.31* height }px;
   border-bottom-right-radius: 75px;
   background: ${ props => props.backgroundColor };
 `;
 
 export const BackgroundContent = styled.View`
   width: ${ width }px;
-  justify-content: space-between;
   align-items: center;
 `;
 
@@ -30,13 +29,25 @@ export const BackgroundColumn = styled.View`
   width: 90%;
 `;
 
+export const TitleContainer = styled.View`
+  flex: 1;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+`;
+
+export const Title = styled.Text`
+  font-size: 80px;
+  font-weight: bold;
+  color: #FFFFFF;
+`;
+
 export const Footer = styled.View`
   flex: 1;
 `;
 
 export const FooterContent = styled.View`
   flex: 1;
-  flex-direction: row;
   width: ${ width }px;
   background: #FFF;
   border-top-left-radius: 75px;
@@ -49,26 +60,25 @@ export const FooterColumn = styled.View`
 
 export const ContentColumn = styled.View`
   width: ${ width }px;
+  height: 100%;
   padding: 20px;
-  height: ${ 0.40 * height }px;
   justify-content: space-around;
   align-items: center;
 `;
 
-export const TextsContainer = styled.View`
-  justify-content: center;
+export const Form = styled.View`
+  width: 100%;
   align-items: center;
 `;
 
-export const Title = styled.Text`
-  font-size: 25px;
-  margin-bottom: 10px;
-  font-weight: bold;
-  color: #444444;
+export const SignUpButton = styled.Text`
+  margin-top: 20px;
 `;
 
-export const Description = styled.Text`
+export const SignUpText = styled.Text`
+  font-style: normal;
+  font-weight: normal;
+  font-size: 16px;
   text-align: center;
-  font-size: 18px;
   color: #999999;
 `;

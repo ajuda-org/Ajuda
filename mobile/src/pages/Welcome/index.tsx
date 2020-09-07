@@ -20,6 +20,7 @@ import {
   Title,
   Description
 } from "./styles";
+import { useNavigation } from "@react-navigation/native";
 
 import { ArrowLeftButton, Button } from "../../components";
 
@@ -34,6 +35,12 @@ import WallpaperHelper from "../../assets/images/helper/wallpaper.png";
 const Welcome: React.FC = ({ navigation }) => {
   const { theme } = useTheme();
   const { profile } = useProfile();
+  const { navigate } = useNavigation();
+
+  function handleNavigateToSignUp() {
+    navigate("SignIn");
+  }
+
   return (
     <Container>
       <Slider backgroundColor={theme.PrimaryColor}>
@@ -69,7 +76,7 @@ const Welcome: React.FC = ({ navigation }) => {
                   Ajude pressoas com tarefas simples.
                 </Description>
               </TextsContainer>
-              <Button text="Vamos lá!" />
+              <Button text="Vamos lá!" onPress={() => handleNavigateToSignUp()}/>
             </ContentColumn>
           </FooterColumn>
         </FooterContent>
