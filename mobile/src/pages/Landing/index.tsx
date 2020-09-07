@@ -27,20 +27,28 @@ function Landing() {
   const [totalConnections, setTotalConnections] = useState(128);
 
   useEffect(() => {
-    AsyncStorage.getItem('userId').then(id => {
-      if ( id ) {
-        navigate(profile);
+    AsyncStorage.getItem('userId').then(async id => {
+      const profile = await AsyncStorage.getItem('profile')
+      if ( id && profile ) {
+        return handleNavigateToHome(profile);
       }
     })
+
   }, [])
 
-  function handleNavigateToHelperWelcome() {
+  async function handleNavigateToHome(profile :string) {
+    navigate(profile);
+  }
+
+  async function handleNavigateToHelperWelcome() {
     setProfile("Helper");
+    await AsyncStorage.setItem("profile","Helper");
     navigate("Welcome");
   }
 
-  function handleNavigateToHelpedWelcome() {
+  async function handleNavigateToHelpedWelcome() {
     setProfile("Helped");
+    await AsyncStorage.setItem("profile","Helped");
     navigate("Welcome");
   }
 
