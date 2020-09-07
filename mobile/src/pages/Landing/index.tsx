@@ -22,7 +22,7 @@ import helperIcon from "../../assets/images/icons/helper.png";
 import heartIcon from "../../assets/images/icons/heart.png";
 
 function Landing() {
-  const { profile, setProfile } = useProfile();
+  const { setProfile } = useProfile();
   const { navigate } = useNavigation();
   const [totalConnections, setTotalConnections] = useState(128);
 
@@ -30,6 +30,7 @@ function Landing() {
     AsyncStorage.getItem('userId').then(async id => {
       const profile = await AsyncStorage.getItem('profile')
       if ( id && profile ) {
+        setProfile(profile)
         return handleNavigateToHome(profile);
       }
     })
