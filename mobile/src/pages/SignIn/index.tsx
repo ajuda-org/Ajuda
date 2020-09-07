@@ -1,11 +1,16 @@
-import React from 'react';
+import React, { useState } from "react";
 import {
+  AsyncStorage,
   Platform,
   StyleSheet
-} from 'react-native';
+} from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
 import { useTheme } from "../../contexts/theme";
+import { useProfile } from "../../contexts/profile";
+
+import api from "../../services/api";
+
 import { ArrowLeftButton, Button, InputLabel } from "../../components";
 import {
   Container,
@@ -24,11 +29,30 @@ import {
 
 export default function Login({ navigation }) {
   const { theme } = useTheme();
+  const { profile } = useProfile();
   const { navigate } = useNavigation();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
+  async function handleSubmit() {
+    const response = await api.post("/sessions", {
+      email,
+      password,
+      type: profile.toLowerCase()
+    })
+
+    const id = response.data[0].id;
+
+    await AsyncStorage.setItem("userId", String(id));
+
+    if ( id ) {
+      console.log( "TA SALVO", id );
+    }
+      
+  };
 
   return (
-    <Container enabled={Platform.OS === 'ios'} behavior="padding">
+    <Container enabled={Platform.OS === "ios"} behavior="padding">
       <Head backgroundColor={theme.PrimaryColor}>
         <BackgroundContent>
           <BackgroundColumn>
@@ -48,9 +72,24 @@ export default function Login({ navigation }) {
         />
         <FooterContent>
           <Form>
-            <InputLabel label="Email" placeholder="Seu email" marginBotom={20}/>
-            <InputLabel label="Senha" placeholder="Sua senha" marginBotom={40}/>
-            <Button text="Entrar" />
+            <InputLabel
+              value={email}
+              onChangeText={setEmail}
+              label="Email"
+              placeholder="Seu email"
+              marginBotom={20}
+              autoCapitalize="none"
+              keyboardType="email-address"
+            />
+            <InputLabel
+              value={password}
+              onChangeText={setPassword}
+              label="Senha"
+              placeholder="Sua senha"
+              marginBotom={40}
+              secureTextEntry={true}
+            />
+            <Button text="Entrar" onPress={ () => handleSubmit() } />
             <Anchor onPress={() => navigate("SignUp")}>
               <AnchorText>
                 Não possui um conta? Crie uma agora mesmo!
