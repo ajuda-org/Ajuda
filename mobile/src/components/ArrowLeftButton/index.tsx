@@ -3,11 +3,11 @@ import { TouchableOpacity, Image, GestureResponderEvent } from 'react-native';
 
 import arrowleft from "../../assets/images/icons/arrowleft.png";
 
-interface haha {
+interface IButton {
   onPress?: ((event: GestureResponderEvent) => void) | undefined;
 }
 
-const ArrowLeftButton: React.FC<haha> = ({ onPress }) => {
+const ArrowLeftButton: React.FC<IButton> = ({ onPress }) => {
   return (
     <TouchableOpacity onPress={onPress}>
       <Image source={arrowleft}/>
