@@ -46,7 +46,7 @@ export const Title = styled.Text`
   color: #FFFFFF;
 `;
 
-export const Footer = styled.ScrollView`
+export const Footer = styled.View`
   flex: 1;
 `;
 
@@ -62,7 +62,7 @@ export const FooterContent = styled.View`
   align-items: center;
 `;
 
-export const Form = styled.View`
+export const Form = styled.ScrollView`
   flex:1;
   align-self: stretch;
   padding: 0px 30px;
