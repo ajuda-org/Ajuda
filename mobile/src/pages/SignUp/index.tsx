@@ -91,7 +91,6 @@ export default function Login({ navigation }) {
                   <InputLabel
                     keyboardType="number-pad"
                     value={cpf}
-                    // onChangeText={setCpf}
                     label="CPF"
                     placeholder="000.000.00-00"
                     marginBotom={20}
