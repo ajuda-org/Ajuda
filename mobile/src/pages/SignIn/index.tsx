@@ -40,13 +40,13 @@ export default function Login({ navigation }) {
       password,
       type: profile.toLowerCase()
     })
-
+    console.log(response.data)
     const id = response.data[0].id;
 
     await AsyncStorage.setItem("userId", String(id));
 
     if ( id ) {
-      console.log( "TA SALVO", id );
+      navigate(profile);
     }
       
   };

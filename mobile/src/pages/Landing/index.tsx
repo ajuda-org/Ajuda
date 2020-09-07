@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { Image } from "react-native";
+import { Image, AsyncStorage } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
 import { useProfile } from "../../contexts/profile";
@@ -22,9 +22,17 @@ import helperIcon from "../../assets/images/icons/helper.png";
 import heartIcon from "../../assets/images/icons/heart.png";
 
 function Landing() {
-  const { setProfile } = useProfile();
+  const { profile, setProfile } = useProfile();
   const { navigate } = useNavigation();
   const [totalConnections, setTotalConnections] = useState(128);
+
+  useEffect(() => {
+    AsyncStorage.getItem('userId').then(id => {
+      if ( id ) {
+        navigate(profile);
+      }
+    })
+  }, [])
 
   function handleNavigateToHelperWelcome() {
     setProfile("Helper");
