@@ -1,110 +1,65 @@
-import React, { useState, useEffect } from "react";
+import React from 'react';
 import {
-  View,
-  Dimensions,
-  StyleSheet,
-  ScrollView,
-  Keyboard
-} from "react-native";
+  Platform,
+  Text,
+  StyleSheet
+} from 'react-native';
+import { useNavigation } from "@react-navigation/native";
 
+import { useTheme } from "../../contexts/theme";
+import { ArrowLeftButton, Button, InputLabel } from "../../components";
 import {
   Container,
-  Slider,
+  Head,
   BackgroundContent,
   BackgroundColumn,
   TitleContainer,
   Title,
   Footer,
+  FooterBorder,
   FooterContent,
-  FooterColumn,
-  ContentColumn,
   Form,
-  SignUpButton,
-  SignUpText
+  Anchor,
+  AnchorText
 } from "./styles";
-import { useNavigation } from "@react-navigation/native";
 
-import {
-  ArrowLeftButton,
-  Button,
-  InputLabel
-} from "../../components";
-
-const { width } = Dimensions.get("window");
-
-import { useTheme } from "../../contexts/theme";
-import { useProfile } from "../../contexts/profile";
-import { TouchableOpacity } from "react-native-gesture-handler";
-
-const Welcome: React.FC = ({ navigation }) => {
+export default function Login({ navigation }) {
   const { theme } = useTheme();
-  const { profile } = useProfile();
   const { navigate } = useNavigation();
 
-  const [keyboardShow, setKeyboardShow ] = useState(false);
-
-  useEffect(() => {
-    Keyboard.addListener("keyboardDidShow", () => setKeyboardShow(true));
-    Keyboard.addListener("keyboardDidHide", () => setKeyboardShow(false));
-    
-    return () => {
-      Keyboard.removeListener("keyboardDidShow", () => setKeyboardShow(true));
-      Keyboard.removeListener("keyboardDidHide", () => setKeyboardShow(false));
-    };
-  
-  }, []);
-
-  function handleNavigateToSignUp() {
-    navigate("Landing");
-  }
 
   return (
-    <Container>
-      <Slider backgroundColor={theme.PrimaryColor}>
-        <ScrollView
-          horizontal
-          snapToInterval={width}
-          decelerationRate="fast"
-          showsHorizontalScrollIndicator={false}
-          bounces={false}
-        >
-          <BackgroundContent>
-            <BackgroundColumn>
-              <ArrowLeftButton onPress={() => navigate("Landing")} />
-            </BackgroundColumn>
-            <TitleContainer>
-              <Title>
-                Ajuda?
-              </Title>
-            </TitleContainer>
-          </BackgroundContent>
-        </ScrollView>
-      </Slider>
+    <Container enabled={Platform.OS === 'ios'} behavior="padding">
+      <Head backgroundColor={theme.PrimaryColor}>
+        <BackgroundContent>
+          <BackgroundColumn>
+            <ArrowLeftButton onPress={() => navigate("Landing")} />
+          </BackgroundColumn>
+         </BackgroundContent>
+         <TitleContainer>
+            <Title>
+              Ajuda?
+            </Title>
+          </TitleContainer>
+      </Head>
       <Footer>
-        <View
-          style={{ ...StyleSheet.absoluteFillObject, backgroundColor: theme.PrimaryColor }}
+        <FooterBorder
+          backgroundColor={theme.PrimaryColor}
+          style={{ ...StyleSheet.absoluteFillObject}}
         />
         <FooterContent>
-          <FooterColumn>
-            <ContentColumn>
-              <Form>
-                  <InputLabel label="Email" placeholder="Informe seu email" marginBotom={20}/>
-                  <InputLabel label="Senha" placeholder="Informe sua senha" marginBotom={40}/>
-                  <Button text="Entrar" onPress={() => handleNavigateToSignUp()}/>
-                  {!keyboardShow && 
-                    <SignUpButton onPress={() => navigate("SignUp")}>
-                      <SignUpText>
-                        Não possui um conta? Crie uma agora mesmo!
-                      </SignUpText>
-                    </SignUpButton>
-                  }
-              </Form>
-            </ContentColumn>
-          </FooterColumn>
+          <Form>
+            <InputLabel label="Email" placeholder="Seu email" marginBotom={20}/>
+            <InputLabel label="Senha" placeholder="Sua senha" marginBotom={40}/>
+            <Button text="Entrar" />
+            <Anchor onPress={() => navigate("SignUp")}>
+              <AnchorText>
+                Não possui um conta? Crie uma agora mesmo!
+              </AnchorText>
+            </Anchor>
+          </Form>
         </FooterContent>
       </Footer>
     </Container>
   );
-};
-
-export default Welcome;
+}

@@ -1,4 +1,5 @@
-import React from "react";
+import React, { RefAttributes } from "react";
+import { TextInput } from "react-native"
 import {
   Container,
   Label,
@@ -7,17 +8,19 @@ import {
 
 interface IInputLabel {
   label: string;
-  placeholder: string;
   marginBotom?: number;
 }
 
-const InputLabel: React.FC<IInputLabel> = ({ label, placeholder, marginBotom = 0 }) => {
+const InputLabel: React.FC<IInputLabel|RefAttributes<TextInput>> = ({ label, placeholder, marginBotom = 0, value, onChangeText, keyboardType }) => {
   return (
     <Container>
       <Label>
         { label }
       </Label>
       <Input
+        value={value}
+        keyboardType={keyboardType}
+        onChangeText={onChangeText}
         marginBotom={marginBotom}
         placeholder={ placeholder }
       />

@@ -16,7 +16,7 @@ export const Container = styled.KeyboardAvoidingView`
 `;
 
 export const Head = styled.View<BackgroundColor>`
-  height: 40%;
+  height: 30%;
   width: 100%;
   background: ${ props => props.backgroundColor };
   border-bottom-right-radius: 75px;
@@ -59,12 +59,13 @@ export const FooterContent = styled.View`
   width: ${ width }px;
   background: #FFF;
   border-top-left-radius: 75px;
+  align-items: center;
 `;
 
 export const Form = styled.View`
   flex:1;
   align-self: stretch;
-  padding: 15px 30px;
+  padding: 0px 30px;
   margin-top: 30px;
 `;
 
