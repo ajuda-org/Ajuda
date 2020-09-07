@@ -1,28 +1,46 @@
-import React, { RefAttributes } from "react";
+import React, { useState } from "react";
 import { TextInput } from "react-native"
 import {
   Container,
+  LabelContainer,
   Label,
+  LabelTip,
   Input
 } from "./styles";
 
+import { useTheme } from "../../contexts/theme";
+
 interface IInputLabel {
   label: string;
+  placeholder: string;
+  labelTip?: string;
   marginBotom?: number;
 }
 
-const InputLabel: React.FC<IInputLabel|RefAttributes<TextInput>> = ({ label, placeholder, marginBotom = 0, value, onChangeText, keyboardType }) => {
+const InputLabel: React.FC<IInputLabel & React.RefObject<TextInput>> = ({ label, placeholder, marginBotom = 0, labelTip, ...rest }) => {
+  const { theme } = useTheme();
+  const [isFocused, setIsFocused] = useState(false);
+
   return (
     <Container>
-      <Label>
-        { label }
-      </Label>
+      <LabelContainer>
+        <Label>
+          { label }
+        </Label>
+
+        {labelTip && <LabelTip>
+          {labelTip}
+        </LabelTip>}
+      </LabelContainer>
       <Input
-        value={value}
-        keyboardType={keyboardType}
-        onChangeText={onChangeText}
+        {...rest}
+        isFocused={isFocused}
         marginBotom={marginBotom}
         placeholder={ placeholder }
+        onFocus={() => setIsFocused(true)}
+        onBlur={() => setIsFocused(false)}
+        borderColor={theme.SecondColor}
+        // onSubmitEditing={ () => setIsFocused(false)}
       />
     </Container>
   );
