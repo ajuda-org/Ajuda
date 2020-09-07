@@ -9,7 +9,7 @@ interface IButton {
 
 const ArrowLeftButton: React.FC<IButton> = ({ onPress }) => {
   return (
-    <TouchableOpacity onPress={onPress}>
+    <TouchableOpacity onPress={onPress} style={{width: 40}}>
       <Image source={arrowleft}/>
     </TouchableOpacity>
   );
