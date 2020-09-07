@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   Platform,
   View,
   StyleSheet
-} from 'react-native';
+} from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
 import { useTheme } from "../../contexts/theme";
@@ -34,12 +34,19 @@ export default function Login({ navigation }) {
   const [WhatsApp, setWhatsApp] = useState("");
   const [password, setPassword] = useState("");
 
+  function formatCpf(text : string) {
+    const badchars = /[^\d]/g
+    const mask = /(\d{3})(\d{3})(\d{3})(\d{2})/
+    const cpf = new String(text).replace(badchars, "");
+    return cpf.replace(mask, "$1.$2.$3-$4");
+  }
+
   return (
-    <Container enabled={Platform.OS === 'ios'} behavior="padding">
+    <Container enabled={Platform.OS === "ios"} behavior="padding">
       <Head backgroundColor={theme.PrimaryColor}>
         <BackgroundContent>
           <BackgroundColumn>
-            <ArrowLeftButton onPress={() => navigate("Landing")} />
+            <ArrowLeftButton onPress={() => navigate("SignIn")} />
           </BackgroundColumn>
          </BackgroundContent>
          <TitleContainer>
@@ -80,9 +87,29 @@ export default function Login({ navigation }) {
                   />
                 </View>
                 <Form>
-                  <InputLabel value={name} onChangeText={setName} label="Nome" placeholder="Seu nome" marginBotom={20}/>
-                  <InputLabel value={cpf} onChangeText={setCpf} label="CPF" placeholder="000.000.00-00" marginBotom={20}/>
-                  <InputLabel value={WhatsApp} onChangeText={setWhatsApp} label="WhatsApp" placeholder="(  ) 0000-0000" marginBotom={40}/>
+                  <InputLabel autoFocus={true} value={name} onChangeText={setName} label="Nome" placeholder="Seu nome" marginBotom={20}/>
+                  <InputLabel
+                    keyboardType="number-pad"
+                    value={cpf}
+                    // onChangeText={setCpf}
+                    label="CPF"
+                    placeholder="000.000.00-00"
+                    marginBotom={20}
+                    labelTip={"Digite somente números."}
+                    onChangeText={(value) => {
+                      setCpf(formatCpf(value));
+                      
+                    }}
+                  />
+                  <InputLabel
+                    keyboardType="number-pad"
+                    value={WhatsApp}
+                    onChangeText={setWhatsApp}
+                    label="WhatsApp"
+                    placeholder="(  ) 0000-0000"
+                    marginBotom={40}
+                    labelTip={"Digite somente números."}
+                  />
                   <Button text="Proxímo" disabled={[name, cpf, WhatsApp].includes("")} onPress={ () => setStep(1) } />
                 </Form>
               </>
@@ -108,9 +135,9 @@ export default function Login({ navigation }) {
                     }}
                   />
                 </View>
-                <Form>
+                <Form keyboardShouldPersistTaps='handled'>
                   <InputLabel keyboardType="email-address" value={email} onChangeText={setEmail} label="Email" placeholder="Seu email" marginBotom={20}/>
-                  <InputLabel value={password} onChangeText={setPassword} label="Senha" placeholder="Sua senha" marginBotom={40}/>
+                  <InputLabel secureTextEntry={true} value={password} onChangeText={setPassword} label="Senha" placeholder="Sua senha" marginBotom={40}/>
                   <Button text="Criar conta" onPress={ () => setStep(0) } />
                   <Anchor onPress={ () => setStep(0) }>
                     <AnchorText>

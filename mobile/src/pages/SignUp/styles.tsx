@@ -46,7 +46,7 @@ export const Title = styled.Text`
   color: #FFFFFF;
 `;
 
-export const Footer = styled.View`
+export const Footer = styled.ScrollView`
   flex: 1;
 `;
 
