@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react"
 import { Image } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
+import { useProfile } from "../../contexts/profile";
+
 import {
   Container,
   Banner,
@@ -20,15 +22,18 @@ import helperIcon from "../../assets/images/icons/helper.png";
 import heartIcon from "../../assets/images/icons/heart.png";
 
 function Landing() {
+  const { setProfile } = useProfile();
   const { navigate } = useNavigation();
   const [totalConnections, setTotalConnections] = useState(128);
 
-  function handleNavigateToHelper() {
-    navigate("Logon", { profile: "Helper" });
+  function handleNavigateToHelperWelcome() {
+    setProfile("Helper");
+    navigate("Welcome");
   }
 
-  function handleNavigateToHelped() {
-    navigate("Logon", { profile: "Helped" });
+  function handleNavigateToHelpedWelcome() {
+    setProfile("Helped");
+    navigate("Welcome");
   }
 
   return (
@@ -44,14 +49,14 @@ function Landing() {
 
       <ButtonsContainer>
         <ButtonPrimary
-          onPress={handleNavigateToHelped}
+          onPress={handleNavigateToHelpedWelcome}
         >
           <Image source={helpedIcon} />
           <ButtonText>Receber Ajuda</ButtonText>
         </ButtonPrimary>
 
         <ButtonSecondary
-          onPress={handleNavigateToHelper}
+          onPress={handleNavigateToHelperWelcome}
         >
           <Image source={helperIcon} />
           <ButtonText>Ajudar</ButtonText>
