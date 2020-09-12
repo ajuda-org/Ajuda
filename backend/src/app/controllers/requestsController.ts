@@ -4,8 +4,12 @@ import { requestsService } from "../services";
 
 const requestsController = {
   index: async (req: Request, res: Response): Promise<Response> => {
-    const { itemsId } = req.body;
-    const requests = await requestsService.listAll(itemsId);
+    const { itemsId } = req.query;
+    const parsedItems = String(itemsId)
+      .split(",")
+      .map(item => Number(item.trim()));
+
+    const requests = await requestsService.listAllByItem(parsedItems);
     return res.status(200).json(requests);
   },
 

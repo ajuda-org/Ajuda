@@ -33,19 +33,13 @@ const requestsRepository = {
     return requestAvaliable;
   },
 
-  listAllRequests: async (itemsId: string[]): Promise<Request[]> => {
+  listAllRequests: async (itemsId: number[]): Promise<Request[]> => {
     const repository = requestsRepository.getRepo();
-    let itemsQuery;
-    if (itemsId.length > 0) {
-      itemsQuery = In(itemsId);
-    } else {
-      itemsQuery = Not("0");
-    }
-
     const allRequests = await repository.find({
-      where: { status: 0, item_id: itemsQuery },
+      where: { status: 0, item_id: In(itemsId) },
       relations: ["owner", "item"]
     });
+
     return allRequests;
   },
 

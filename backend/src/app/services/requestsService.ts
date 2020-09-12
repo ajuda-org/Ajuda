@@ -8,8 +8,11 @@ import {
 import { Request } from "../models";
 
 const requestsService = {
-  listAll: async (itemId: string[]): Promise<Request[]> => {
-    const requests = await requestsRepository.listAllRequests(itemId);
+  listAllByItem: async (itemsId: number[]): Promise<Request[]> => {
+    if (Number.isNaN(itemsId[0])) {
+      return [];
+    }
+    const requests = await requestsRepository.listAllRequests(itemsId);
     return requests;
   },
 
