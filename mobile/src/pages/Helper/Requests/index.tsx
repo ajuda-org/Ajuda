@@ -4,6 +4,7 @@ import {
   ScrollView,
   SafeAreaView,
   Alert,
+  AsyncStorage
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Feather as Icon } from "@expo/vector-icons";
@@ -56,6 +57,7 @@ const Requests = () => {
   ]);
   const [selectedItems, setSelectedItems] = useState<number[]>([]);
   const [Requests, setRequests] = useState<Request[]>([]);
+  const [name, setName] = useState("");
 
   useEffect(() => {
     api.get("/items").then((response) => {
@@ -65,6 +67,8 @@ const Requests = () => {
 
   useEffect(() => {
     async function loadPosition() {
+      const userName = await AsyncStorage.getItem("name");
+      setName(userName);
       const { status } = await Location.requestPermissionsAsync();
 
       if (status !== "granted") {
@@ -112,14 +116,20 @@ const Requests = () => {
     }
   }
 
+  async function logOut() {
+    await AsyncStorage.setItem("userId", "")
+    await AsyncStorage.setItem("profile", "")
+    navigation.navigate("Landing");
+  }
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <Container>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Icon name="arrow-left" color={theme.PrimaryColor} size={20} />
+        <TouchableOpacity onPress={() => logOut()}>
+          <Icon name="log-out" color={theme.PrimaryColor} size={20} />
         </TouchableOpacity>
         <TextContainer>
-          <Title>Bem vindo Henrique.</Title>
+          <Title>Bem vindo { name }.</Title>
           <Description>
             Selecione o tipo de item que deseja ajudar.
           </Description>

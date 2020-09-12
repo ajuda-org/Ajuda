@@ -4,15 +4,16 @@ import {
   Text,
   TouchableOpacity,
   StyleSheet,
-  ScrollView,
-  Image,
   SafeAreaView,
+  AsyncStorage
 } from "react-native";
-import { useNavigation, useRoute } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 import { Feather as Icon } from "@expo/vector-icons";
 import { SvgUri } from "react-native-svg";
 import Constants from "expo-constants";
 import api from "../../../services/api";
+
+import { useTheme } from "../../../contexts/theme";
 
 interface Item {
   id: number;
@@ -32,12 +33,19 @@ interface Request {
 
 const Profile = () => {
   const navigation = useNavigation();
+  const { theme } = useTheme();
+
+  async function logOut() {
+    await AsyncStorage.setItem("userId", "")
+    await AsyncStorage.setItem("profile", "")
+    navigation.navigate("Landing");
+  }
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <View style={styles.container}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Icon name="arrow-left" color="#34cb79" size={20} />
+        <TouchableOpacity onPress={() => logOut()}>
+          <Icon name="log-out" color={theme.PrimaryColor} size={20} />
         </TouchableOpacity>
         <View style={{borderLeftWidth: 5, borderLeftColor: "#54C7C0", padding: 10, marginTop: 20}}>
           <Text style={styles.title}>Perfil.</Text>
