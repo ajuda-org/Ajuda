@@ -10,6 +10,8 @@ import SignUp from "../pages/SignUp";
 import Helped from "./HelpedTabs";
 import Helper from "./HelperTabs";
 
+import { Detail } from "../pages/Helper";
+
 const { Navigator, Screen } = createStackNavigator();
 
 function AppStack() {
@@ -22,6 +24,7 @@ function AppStack() {
         <Screen name="SignUp" component={SignUp} />
         <Screen name="Helped" component={Helped} />
         <Screen name="Helper" component={Helper} />
+        <Screen name="Detail" component={Detail} />
       </Navigator>
     </NavigationContainer>
   );

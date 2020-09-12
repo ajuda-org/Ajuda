@@ -9,7 +9,7 @@ export default function App() {
     <ProfileProvider>
       <ThemeProvider>
         <AppStack />
-        <StatusBar style="light" />
+        <StatusBar style="dark" />
       </ThemeProvider>
     </ProfileProvider>
   );
