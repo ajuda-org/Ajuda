@@ -53,6 +53,13 @@ export const ImageContainer = styled.View`
   justify-content: center;
 `;
 
+export const Image = styled.Image`
+  width: 32px;
+  height: 32px;
+  resize-mode: cover;
+  border-radius: 16px;
+`;
+
 export const HelpedInfos = styled.View`
   margin-left: 10px;
 `;

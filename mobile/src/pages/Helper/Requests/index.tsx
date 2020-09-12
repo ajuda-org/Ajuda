@@ -147,7 +147,7 @@ const Requests = () => {
                   <MapMarkerContainer color={theme.PrimaryColor}>
                     <MapMarkerImage
                       source={{
-                        uri: request.image_url,
+                        uri: `https://api.adorable.io/avatars/1200/${request.owner.id}`
                       }}
                     />
                     <MapMarkerTitle>{request.item.name}</MapMarkerTitle>

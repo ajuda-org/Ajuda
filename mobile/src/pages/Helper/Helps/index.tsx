@@ -5,7 +5,6 @@ import {
   TouchableOpacity,
   StyleSheet,
   ScrollView,
-  Image,
   SafeAreaView,
 } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
@@ -23,6 +22,7 @@ import {
   Title,
   HelpedContainer,
   ImageContainer,
+  Image,
   HelpedInfos,
   HelpedName,
   HelpedPoint
@@ -94,9 +94,7 @@ const Helps = () => {
                 </TextContainer>
                 <HelpedContainer>
                   <ImageContainer>
-                    <Text>
-                      O
-                    </Text>
+                    <Image source={{ uri: `https://api.adorable.io/avatars/32/${request.owner.id}`}} />
                   </ImageContainer>
                   <HelpedInfos>
                     <HelpedName>
