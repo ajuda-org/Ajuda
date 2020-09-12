@@ -2,6 +2,15 @@ import styled from 'styled-components/native';
 import Constants from "expo-constants";
 import MapView, { Marker as MapMarker } from "react-native-maps";
 
+interface IItems {
+  selected: boolean;
+  color: string;
+}
+
+interface IMapMarkerContainer {
+  color: string;
+}
+
 export const Container = styled.View`
   flex: 1;
   padding: 0px 32px;
@@ -45,10 +54,10 @@ export const Marker = styled(MapMarker)`
   height: 80px;
 `;
 
-export const MapMarkerContainer = styled.View`
+export const MapMarkerContainer = styled.View<IMapMarkerContainer>`
   width: 90px;
   height: 70px;
-  background-color: #34CB79;
+  background-color: ${props => props.color};
   flex-direction: column;
   border-radius: 8px;
   overflow: hidden;
@@ -74,10 +83,10 @@ export const ItemsContainer = styled.View`
   margin-bottom: 32px;
 `;
 
-export const Items = styled.TouchableOpacity<{selected: boolean}>`
-  background-color: #fff;
+export const Items = styled.TouchableOpacity<IItems>`
+  background-color: #D8EBEA;
   border-width: 2px;
-  border-color: ${props => props.selected ? "#34CB79" : "#eee" };
+  border-color: ${props => props.selected ? props.color : "#eee" };
   height: 120px;
   width: 120px;
   border-radius: 8px;
@@ -90,8 +99,8 @@ export const Items = styled.TouchableOpacity<{selected: boolean}>`
   text-align: center;
 `;
 
-export const ItemTitle = styled.Text<{selected: boolean}>`
-  color: ${props => props.selected ? "#34CB79" : "#204442" };
+export const ItemTitle = styled.Text<IItems>`
+  color: ${props => props.selected ? props.color : "#204442" };
   text-align: center;
   font-size: 18px;
 `;

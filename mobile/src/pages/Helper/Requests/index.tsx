@@ -11,6 +11,8 @@ import { SvgUri } from "react-native-svg";
 import api from "../../../services/api";
 import * as Location from "expo-location";
 
+import { useTheme } from "../../../contexts/theme";
+
 import {
   Container,
   TextContainer,
@@ -45,6 +47,7 @@ interface Request {
 
 const Requests = () => {
   const navigation = useNavigation();
+  const { theme } = useTheme();
 
   const [items, setItems] = useState<Item[]>([]);
   const [initialPosition, setInitialPosition] = useState<[number, number]>([
@@ -113,7 +116,7 @@ const Requests = () => {
     <SafeAreaView style={{ flex: 1 }}>
       <Container>
         <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Icon name="arrow-left" color="#34cb79" size={20} />
+          <Icon name="arrow-left" color={theme.PrimaryColor} size={20} />
         </TouchableOpacity>
         <TextContainer>
           <Title>Bem vindo Henrique.</Title>
@@ -141,7 +144,7 @@ const Requests = () => {
                     longitude: Number(request.longitude),
                   }}
                 >
-                  <MapMarkerContainer>
+                  <MapMarkerContainer color={theme.PrimaryColor}>
                     <MapMarkerImage
                       source={{
                         uri: request.image_url,
@@ -164,12 +167,18 @@ const Requests = () => {
           {items.map((item) => (
             <Items
               selected={selectedItems.includes(item.id)}
+              color={theme.PrimaryColor}
               key={String(item.id)}
               activeOpacity={0.6}
               onPress={() => handleSelectItem(item.id)}
             >
               <SvgUri width={42} height={42} uri={item.image_url} />
-              <ItemTitle selected={selectedItems.includes(item.id)}>{item.name}</ItemTitle>
+              <ItemTitle
+                color={theme.PrimaryColor}
+                selected={selectedItems.includes(item.id)}
+              >
+                {item.name}
+              </ItemTitle>
             </Items>
           ))}
         </ScrollView>

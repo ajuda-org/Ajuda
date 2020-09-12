@@ -14,6 +14,20 @@ import { SvgUri } from "react-native-svg";
 import Constants from "expo-constants";
 import api from "../../../services/api";
 
+import {
+  ItemContainer,
+  ItemTypeContainer,
+  ItemContent,
+  TextContainer,
+  Date,
+  Title,
+  HelpedContainer,
+  ImageContainer,
+  HelpedInfos,
+  HelpedName,
+  HelpedPoint
+} from "./style"
+
 interface Item {
   id: number;
   name: string;
@@ -32,6 +46,22 @@ interface Request {
 
 const Helps = () => {
   const navigation = useNavigation();
+  const [requestsHelper, setRequestsHelper] = useState();
+
+  useEffect(() => {
+    api
+      .get("/helpers", {
+        params: {
+          userId: 2,
+          status: 0
+        }
+      })
+      .then((response) => {
+        setRequestsHelper(response.data);
+      }).catch((err) => {
+        console.log(err);
+      })
+  }, []);
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -45,6 +75,42 @@ const Helps = () => {
             Esses são seus pedidos atendidos.
           </Text>
         </View>
+
+        <ScrollView style={{flex: 1}}>
+          {requestsHelper && requestsHelper.requests.map( request => (
+            <ItemContainer key={request.id}>
+              <ItemTypeContainer>
+                <SvgUri width={60} height={60} uri={`http://192.168.15.2:3333/uploads/${request.item.image}`} />
+              </ItemTypeContainer>
+              <ItemContent>
+                <TextContainer>
+                  <Date>
+                  {request.created_at}
+                  </Date>
+
+                  <Title>
+                    {request.title}
+                  </Title>
+                </TextContainer>
+                <HelpedContainer>
+                  <ImageContainer>
+                    <Text>
+                      O
+                    </Text>
+                  </ImageContainer>
+                  <HelpedInfos>
+                    <HelpedName>
+                      {request.owner.name}
+                    </HelpedName>
+                    <HelpedPoint>
+                      4.7
+                    </HelpedPoint>
+                  </HelpedInfos>
+                </HelpedContainer>
+              </ItemContent>
+            </ItemContainer>
+          ))}
+        </ScrollView>
       </View>
     </SafeAreaView>
   );
