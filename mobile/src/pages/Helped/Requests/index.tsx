@@ -58,33 +58,29 @@ const Requests = () => {
   const { theme } = useTheme();
 
   const [name, setName] = useState("");
-  const [id, setId] = useState("");
 
   useEffect(() => {
-    async function loadName() {
+    async function loadInfos() {
       const userName = await AsyncStorage.getItem("name");
       const userId = await AsyncStorage.getItem("userId");
       setName(userName);
-      setId(userId);
-    }
-    loadName()
-  }, []);  
 
-  useEffect(() => {
-    api
-      .get("/owners", {
-        params: {
-          ownerId: id,
-          status: 0
-        }
+      await api
+        .get("/owners", {
+          params: {
+            ownerId: userId,
+            status: 0
+          }
+        })
+        .then((response) => {
+          console.log(response.data)
+          setRequestsOwner(response.data);
+        }).catch(({ response }) => {
+          console.log(response)
       })
-      .then((response) => {
-        console.log(response.data)
-        setRequestsOwner(response.data);
-      }).catch(({ response }) => {
-        console.log(response)
-      })
-  }, []);
+    }
+    loadInfos()
+  }, [requestsOwner]);
 
   async function logOut() {
     await AsyncStorage.setItem("userId", "")
