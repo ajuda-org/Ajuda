@@ -11,10 +11,7 @@ import {
 import { Request } from "../models";
 
 const requestsOwnersService = {
-  listByStatus: async (
-    ownerId: string,
-    status: string[]
-  ): Promise<Request[]> => {
+  listByStatus: async (ownerId: number, status: number): Promise<Request[]> => {
     const requests = await requestsOwnersRepository.listAllByStatus(
       ownerId,
       status

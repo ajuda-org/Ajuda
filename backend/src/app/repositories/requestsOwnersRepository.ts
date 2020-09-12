@@ -7,18 +7,13 @@ const requestsOwnersRepository = {
   },
 
   listAllByStatus: async (
-    ownerId: string,
-    status: string[]
+    ownerId: number,
+    status: number
   ): Promise<Request[]> => {
     const repository = requestsOwnersRepository.getRepo();
-    let statusQuery;
-    if (status.length > 0) {
-      statusQuery = In(status);
-    } else {
-      statusQuery = Not("9999");
-    }
+
     const allRequests = await repository.find({
-      where: { status: statusQuery, owner_id: ownerId },
+      where: { status, owner_id: ownerId },
       relations: ["owner", "item", "helpers", "helpers.user"]
     });
     return allRequests;

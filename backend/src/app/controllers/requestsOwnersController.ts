@@ -8,17 +8,17 @@ const requestsOwnersController = {
       ownerId: Yup.string().required(
         "É obrigatório informar o id do dono do pedido."
       ),
-      status: Yup.array()
+      status: Yup.string().required("É obrigatório informar o status.")
     });
 
-    await schema.validate(req.body).then(
+    await schema.validate(req.query).then(
       async () => {
-        const { ownerId, status } = req.body;
-        const requestsHelpers = await requestsOwnerService.listByStatus(
-          ownerId,
-          status
+        const { ownerId, status } = req.query;
+        const requestsOwner = await requestsOwnerService.listByStatus(
+          Number(ownerId),
+          Number(status)
         );
-        return res.status(200).json(requestsHelpers);
+        return res.status(200).json(requestsOwner);
       },
       ({ errors, path }) => {
         return res.status(422).json({ field: path, error: errors[0] });
