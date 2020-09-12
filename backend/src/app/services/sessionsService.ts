@@ -25,7 +25,7 @@ const sessionsService = {
       };
     }
 
-    const encryptedPassword = true; //await userExist.checkPassword(password);
+    const encryptedPassword = await userExist.checkPassword(password);
 
     if (!encryptedPassword) {
       return {
@@ -36,8 +36,11 @@ const sessionsService = {
         }
       };
     }
-
-    return { status: 200, entityOrError: [userExist] };
+    const { id, name, cpf, whatsapp } = userExist;
+    return {
+      status: 200,
+      entityOrError: { id, name, cpf, email, type, whatsapp }
+    };
   }
 };
 

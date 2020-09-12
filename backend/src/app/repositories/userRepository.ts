@@ -54,7 +54,11 @@ const userRepository = {
     type: string
   ): Promise<User | undefined> => {
     const repository = userRepository.getRepo();
-    const user = await repository.findOne({ email, type });
+    const user = await repository
+      .createQueryBuilder("row")
+      .addSelect("row.password")
+      .where({ email, type })
+      .getOne();
     return user;
   },
 

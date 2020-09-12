@@ -26,7 +26,7 @@ const userService = {
       };
     }
 
-    return { status: 201, entityOrError: [userExist] };
+    return { status: 201, entityOrError: userExist };
   },
 
   create: async ({
@@ -59,7 +59,7 @@ const userService = {
       password
     );
 
-    return { status: 201, entityOrError: [user] };
+    return { status: 201, entityOrError: user };
   },
 
   updateById: async (
@@ -78,7 +78,7 @@ const userService = {
     }
     await userRepository.updateById(id, whatsapp);
 
-    return { status: 201, entityOrError: [userExist] };
+    return { status: 201, entityOrError: userExist };
   }
 };
 
