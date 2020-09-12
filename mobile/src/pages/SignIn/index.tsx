@@ -41,9 +41,10 @@ export default function Login({ navigation }) {
       type: profile.toLowerCase()
     })
     console.log(response.data)
-    const id = response.data.id;
+    const { id, name } = response.data;
 
     await AsyncStorage.setItem("userId", String(id));
+    await AsyncStorage.setItem("name", name);
 
     if ( id ) {
       navigate(profile);
