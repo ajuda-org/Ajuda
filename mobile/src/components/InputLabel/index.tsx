@@ -5,24 +5,33 @@ import {
   LabelContainer,
   Label,
   LabelTip,
-  Input
+  Input,
+  ErrorMessage
 } from "./styles";
 
 import { useTheme } from "../../contexts/theme";
 
+interface error {
+  error: string;
+  field: string;
+}
+
 interface IInputLabel {
+  name: string;
   label: string;
   placeholder: string;
   labelTip?: string;
   marginBotom?: number;
+  error: error;
 }
 
-const InputLabel: React.FC<IInputLabel & React.RefObject<TextInput>> = ({ label, placeholder, marginBotom = 0, labelTip, ...rest }) => {
+const InputLabel: React.FC<IInputLabel & React.RefObject<TextInput>> = ({ label, name, placeholder, marginBotom = 0, labelTip, error, ...rest }) => {
   const { theme } = useTheme();
   const [isFocused, setIsFocused] = useState(false);
+  const isError = error.field == name
 
   return (
-    <Container>
+    <Container marginBotom={marginBotom}>
       <LabelContainer>
         <Label>
           { label }
@@ -34,14 +43,18 @@ const InputLabel: React.FC<IInputLabel & React.RefObject<TextInput>> = ({ label,
       </LabelContainer>
       <Input
         {...rest}
+        error={isError}
         isFocused={isFocused}
-        marginBotom={marginBotom}
         placeholder={ placeholder }
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
         borderColor={theme.SecondColor}
         // onSubmitEditing={ () => setIsFocused(false)}
       />
+      {isError && 
+        <ErrorMessage>
+          {error.error}
+        </ErrorMessage>}
     </Container>
   );
 }

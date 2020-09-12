@@ -2,13 +2,14 @@ import styled from 'styled-components/native';
 
 interface IInput {
   placeholder: string;
-  marginBotom?: number;
   isFocused: boolean;
   borderColor: string;
+  error: boolean;
 }
 
-export const Container = styled.View`
+export const Container = styled.View<{marginBotom?: number}>`
   width: 100%;
+  margin-bottom: ${props =>props.marginBotom}px;
 `;
 
 export const LabelContainer = styled.View`
@@ -37,7 +38,16 @@ export const Input = styled.TextInput<IInput>`
   padding: 15px;
   border: ${props => props.isFocused ? `4px solid ${props.borderColor}` : "1px solid #DDDDDD" };
   border-radius: 20px;
-  margin-bottom: ${props =>props.marginBotom}px;
   color: #999999;
   font-size: 18px;
+  ${
+    props => props.error && !props.isFocused && "border-color: #F63535"
+  }
+`;
+
+export const ErrorMessage = styled.Text`
+  font-size: 10px;
+  color: #F63535;
+  margin-left: 10px;
+  margin-top: 5px;
 `;

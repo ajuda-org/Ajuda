@@ -11,6 +11,11 @@ import { useProfile } from "../../contexts/profile";
 
 import api from "../../services/api";
 
+interface error {
+  error: string;
+  field: string;
+}
+
 import { ArrowLeftButton, Button, InputLabel } from "../../components";
 import {
   Container,
@@ -27,29 +32,34 @@ import {
   AnchorText
 } from "./styles";
 
-export default function Login({ navigation }) {
+export default function Login() {
   const { theme } = useTheme();
   const { profile } = useProfile();
   const { navigate } = useNavigation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState<error>({error: "", field: ""});
 
   async function handleSubmit() {
-    const response = await api.post("/sessions", {
+    api.post("/sessions", {
       email,
       password,
       type: profile.toLowerCase()
+    }).then(async (response) => {
+      const { id, name } = response.data;
+
+      await AsyncStorage.setItem("userId", String(id));
+      await AsyncStorage.setItem("name", name);
+  
+      if ( id ) {
+        navigate(profile);
+      }
+    }).catch(({ response }) => {
+      setError({
+        error: response.data.error,
+        field: response.data.field
+      })
     })
-    console.log(response.data)
-    const { id, name } = response.data;
-
-    await AsyncStorage.setItem("userId", String(id));
-    await AsyncStorage.setItem("name", name);
-
-    if ( id ) {
-      navigate(profile);
-    }
-      
   };
 
   return (
@@ -81,6 +91,8 @@ export default function Login({ navigation }) {
               marginBotom={20}
               autoCapitalize="none"
               keyboardType="email-address"
+              name="email"
+              error={error}
             />
             <InputLabel
               value={password}
@@ -89,6 +101,8 @@ export default function Login({ navigation }) {
               placeholder="Sua senha"
               marginBotom={40}
               secureTextEntry={true}
+              name="password"
+              error={error}
             />
             <Button text="Entrar" onPress={ () => handleSubmit() } />
             <Anchor onPress={() => navigate("SignUp")}>
