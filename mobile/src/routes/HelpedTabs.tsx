@@ -2,7 +2,7 @@ import React from 'react';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
 
-import Requests from "../pages/Helper/Requests";
+import { Requests } from "../pages/Helped";
 
 import { useTheme } from "../contexts/theme";
 
