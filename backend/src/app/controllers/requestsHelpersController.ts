@@ -6,15 +6,15 @@ const helpersController = {
   index: async (req: Request, res: Response): Promise<void> => {
     const schema = Yup.object().shape({
       userId: Yup.string().required("É obrigatório informar o id do ajudante."),
-      status: Yup.array()
+      status: Yup.string().required("É obrigatório informar o status.")
     });
 
-    await schema.validate(req.body).then(
+    await schema.validate(req.query).then(
       async () => {
-        const { userId, status } = req.body;
+        const { userId, status } = req.query;
         const requestsHelpers = await requestsHelpersService.listByStatus(
-          userId,
-          status
+          Number(userId),
+          Number(status)
         );
         return res.status(200).json(requestsHelpers);
       },

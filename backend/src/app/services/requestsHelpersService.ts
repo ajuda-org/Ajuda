@@ -20,9 +20,9 @@ interface serviceResponseWithHelper {
 
 const requestsHelpersService = {
   listByStatus: async (
-    userId: string,
-    status: string[]
-  ): Promise<RequestHelper[]> => {
+    userId: number,
+    status: number
+  ): Promise<RequestHelper> => {
     const requests = await requestsHelpersRepository.listAllByStatus(
       userId,
       status

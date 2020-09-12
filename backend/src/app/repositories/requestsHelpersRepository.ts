@@ -24,21 +24,16 @@ const requestsHelpersRepository = {
   },
 
   listAllByStatus: async (
-    userId: string,
-    status: string[]
-  ): Promise<RequestHelper[]> => {
+    userId: number,
+    status: number
+  ): Promise<RequestHelper> => {
     const repository = requestsHelpersRepository.getRepo();
-    let statusQuery;
-    if (status.length > 0) {
-      statusQuery = In(status);
-    } else {
-      statusQuery = Not("9999");
-    }
+
     const allRequests = await repository.find({
-      where: { status: statusQuery, user_id: userId },
+      where: { status, user_id: userId },
       relations: ["user", "requests", "requests.item", "requests.owner"]
     });
-    return allRequests;
+    return allRequests[0];
   },
 
   create: async ({ requestId, userId }: IHelpers): Promise<RequestHelper> => {
