@@ -73,14 +73,13 @@ const Requests = () => {
           }
         })
         .then((response) => {
-          console.log(response.data)
           setRequestsOwner(response.data);
         }).catch(({ response }) => {
           console.log(response)
       })
     }
     loadInfos()
-  }, [requestsOwner]);
+  }, []);
 
   async function logOut() {
     await AsyncStorage.setItem("userId", "")
@@ -147,7 +146,7 @@ const Requests = () => {
             ))}
           </ScrollView>
           <ButtonContainer>
-            <Button text="Novo pedido"/>
+            <Button text="Novo pedido" onPress={() => navigation.navigate("NewRequest")}/>
           </ButtonContainer>
         </View>
       </Container>
