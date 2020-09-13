@@ -16,6 +16,7 @@ export const TextContainer = styled.View<ITextContainer>`
   border-left-color: ${props => props.color};
   padding: 10px;
   margin-top: 20px;
+  margin-bottom: 20px;
 `;
 
 export const Title = styled.Text`
@@ -33,7 +34,7 @@ export const Description = styled.Text`
 export const ItemContainer = styled.TouchableOpacity`
   background-color: #FFFFFF;
   height: 150px;
-  margin-top: 20px;
+  margin-bottom: 20px;
   border-radius: 8px;
   box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.25);
   flex-direction: row;
