@@ -79,7 +79,7 @@ const Requests = () => {
       })
     }
     loadInfos()
-  }, []);
+  }, [requestsOwner]);
 
   async function logOut() {
     await AsyncStorage.setItem("userId", "")

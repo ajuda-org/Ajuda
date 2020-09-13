@@ -47,6 +47,9 @@ const Requests = () => {
   const { theme } = useTheme();
   const [items, setItems] = useState<Item[]>([])
   const [itemSelected, setItemSelected] = useState<string>("")
+  const [title, setTitle] = useState<string>("")
+  const [descripion, setDescripion] = useState<string>("")
+  const [id, setId] = useState<string>("")
   const [step, setStep] = useState<number>(1)
   const [Positions, setPositions] = useState<[number, number]>([
     0,
@@ -56,6 +59,7 @@ const Requests = () => {
   useEffect(() => {
     async function loadInfos() {
       const userId = await AsyncStorage.getItem("userId");
+      setId(userId);
       await api
         .get("/items").then((response) => {
             setItems(response.data)
@@ -87,71 +91,97 @@ const Requests = () => {
     setPositions([latitude, longitude])
   }
 
-  return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <Container color={ step == 1 ? theme.PrimaryColor : "#FFF" }>
-        <TouchableOpacity onPress={() => step == 1 ? navigation.goBack() : setStep(1)}>
-          <Icon name="arrow-left" color={ step == 1 ? "#fff" : theme.PrimaryColor } size={20} />
-        </TouchableOpacity>
-        {step == 1 ? 
-          (
-            <>  
-              <TextContainer>
-                <Title>Preciso de ajuda com</Title>
-              </TextContainer>
-              <View style={{flex: 1, marginTop: 10}}>
-                <SafeAreaView style={{flex: 1}}>
-                  <FlatList
-                    numColumns={2}
-                    data={items}
-                    renderItem={({ item }) => (
-                      <ItemButton
-                        onPress={ () => itemSelected == item.id ? setItemSelected("") : setItemSelected(item.id)}
-                        selected={itemSelected == item.id}>
-                        <SvgUri width={60} height={60} uri={item.image_url} />
-                        <ItemText selected={itemSelected == item.id}>
-                          { item.name }
-                        </ItemText>
-                      </ItemButton>
-                    )}
-                    keyExtractor={item => item.id}
-                  />
-                </SafeAreaView>
-                <ButtonContainer>
-                  <Button disabled={!itemSelected} text="Proxímo" color={theme.SecondColor} onPress={() => setStep(2)}/>
-                </ButtonContainer>
-              </View>
-            </>
-          )
-          : (
-            <View style={{flex: 1}}>
-              <ScrollView>
-                <InputLabel label="Título" placeholder="Informe o título do pedido" name="title" error={{ error: "", field: "" }} marginTop={20}/>
-                <InputTextAreaLabel
-                  label="Descrição"
-                  placeholder="Informe a descrição do pedido"
-                  name="Description"
-                  error={{ error: "", field: "" }}
-                  marginTop={20}
-                />
-                <Label marginTop={20}>Sua localização</Label>
-                <View style={styles.mapContainer}>
-                  { Positions[0] !== 0 && (
-                    <MapView onPress={(event) => handleMarkerPress(event)} style={styles.map} initialRegion={{latitude: Positions[0], longitude: Positions[1], latitudeDelta: 0.014, longitudeDelta: 0.014, }}>
-                      <Marker identifier={"1"} coordinate={{latitude: Positions[0], longitude: Positions[1]}} />
-                    </MapView>
-                  ) }
-                </View>
-              </ScrollView>
+  async function handleSubmit() {
+    await api
+    .post("/requests", { 
+      title: title,
+      description: descripion,
+      latitude: Positions[0],
+      longitude: Positions[1],
+      userId: id,
+      itemId: itemSelected
+    }).then((response) => {
+        Alert.alert("Pedido cadastrado", "Seu pedido de ajuda foi cadastrado com sucesso!");
+        navigation.navigate("Requests")
+      }).catch(({ response }) => {
+        console.log(response.data)
+      }
+    )
+  }
 
+  return (
+    <Container color={ step == 1 ? theme.PrimaryColor : "#FFF" }>
+      <TouchableOpacity onPress={() => step == 1 ? navigation.goBack() : setStep(1)}>
+        <Icon name="arrow-left" color={ step == 1 ? "#fff" : theme.PrimaryColor } size={20} />
+      </TouchableOpacity>
+      {step == 1 ? 
+        (
+          <>  
+            <TextContainer>
+              <Title>Preciso de ajuda com</Title>
+            </TextContainer>
+            <View style={{flex: 1, marginTop: 10}}>
+              <SafeAreaView style={{flex: 1}}>
+                <FlatList
+                  numColumns={2}
+                  data={items}
+                  renderItem={({ item }) => (
+                    <ItemButton
+                      onPress={ () => itemSelected == item.id ? setItemSelected("") : setItemSelected(item.id)}
+                      selected={itemSelected == item.id}>
+                      <SvgUri width={60} height={60} uri={item.image_url} />
+                      <ItemText selected={itemSelected == item.id}>
+                        { item.name }
+                      </ItemText>
+                    </ItemButton>
+                  )}
+                  keyExtractor={item => item.id}
+                />
+              </SafeAreaView>
               <ButtonContainer>
-                <Button text="Cadastrar" color={theme.SecondColor} onPress={() => console.log(step)}/>
+                <Button disabled={!itemSelected} text="Proxímo" color={theme.SecondColor} onPress={() => setStep(2)}/>
               </ButtonContainer>
             </View>
-          )
-        }
-      </Container>
-    </SafeAreaView>
+          </>
+        )
+        : (
+          <View style={{flex: 1}}>
+            <ScrollView>
+              <InputLabel
+                label="Título"
+                placeholder="Informe o título do pedido"
+                name="title"
+                error={{ error: "", field: "" }}
+                marginTop={20}
+                value={title}
+                onChangeText={setTitle}
+              />
+              <InputTextAreaLabel
+                label="Descrição"
+                placeholder="Informe a descrição do pedido"
+                name="Description"
+                error={{ error: "", field: "" }}
+                marginTop={20}
+                value={descripion}
+                onChangeText={setDescripion}
+              />
+              <Label marginTop={20}>Sua localização</Label>
+              <View style={styles.mapContainer}>
+                { Positions[0] !== 0 && (
+                  <MapView onPress={(event) => handleMarkerPress(event)} style={styles.map} initialRegion={{latitude: Positions[0], longitude: Positions[1], latitudeDelta: 0.014, longitudeDelta: 0.014, }}>
+                    <Marker identifier={"1"} coordinate={{latitude: Positions[0], longitude: Positions[1]}} />
+                  </MapView>
+                ) }
+              </View>
+            </ScrollView>
+
+            <ButtonContainer>
+              <Button text="Cadastrar" color={theme.SecondColor} onPress={() => handleSubmit()}/>
+            </ButtonContainer>
+          </View>
+        )
+      }
+    </Container>
   );
 };
 
