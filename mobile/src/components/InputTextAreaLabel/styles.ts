@@ -34,8 +34,9 @@ export const LabelTip = styled.Text`
 `;
 
 export const Input = styled.TextInput<IInput>`
-  height: 55px;
+  height: 100px;
   width: 100%;
+  text-align-vertical: top;
   padding: 15px;
   border: ${props => props.isFocused ? `4px solid ${props.borderColor}` : "1px solid #DDDDDD" };
   border-radius: 20px;

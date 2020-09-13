@@ -16,7 +16,7 @@ interface error {
   field: string;
 }
 
-interface IInputLabel {
+interface IInputTextLabel {
   name: string;
   label: string;
   placeholder: string;
@@ -26,7 +26,7 @@ interface IInputLabel {
   error: error;
 }
 
-const InputLabel: React.FC<IInputLabel & TextInputProps> = ({ label, name, placeholder, marginBotom = 0, marginTop = 0, labelTip, error, ...rest }) => {
+const InputTextLabel: React.FC<IInputTextLabel & TextInputProps> = ({ label, name, placeholder, marginBotom = 0, marginTop = 0, labelTip, error, ...rest }) => {
   const { theme } = useTheme();
   const [isFocused, setIsFocused] = useState(false);
   const isError = error.field == name
@@ -50,7 +50,8 @@ const InputLabel: React.FC<IInputLabel & TextInputProps> = ({ label, name, place
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
         borderColor={theme.SecondColor}
-        // onSubmitEditing={ () => setIsFocused(false)}
+        multiline={true}
+        numberOfLines={5}
       />
       {isError && 
         <ErrorMessage>
@@ -60,4 +61,4 @@ const InputLabel: React.FC<IInputLabel & TextInputProps> = ({ label, name, place
   );
 }
 
-export default InputLabel;
+export default InputTextLabel;

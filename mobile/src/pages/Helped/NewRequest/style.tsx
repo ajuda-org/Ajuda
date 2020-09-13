@@ -1,4 +1,5 @@
 import styled from 'styled-components/native';
+import { Dimensions } from "react-native";
 import Constants from "expo-constants";
 
 export const Container = styled.View<{color: string;}>`
@@ -26,8 +27,25 @@ export const Description = styled.Text`
 `;
 
 export const ButtonContainer = styled.View`
-  margin-bottom: 15px;
+  margin-bottom: 20px;
   position: absolute;
   bottom: 0px;
   width: 100%;
+`;
+
+export const ItemButton = styled.TouchableOpacity<{selected: boolean;}>`
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  margin: 15px;
+  background-color: #FFF;
+  border-radius: 30px;
+  height: ${Dimensions.get('window').width / 3}px;
+  ${props => props.selected && "border: 4px solid #94A5F5;"}
+`;
+
+export const ItemText = styled.Text<{selected: boolean;}>`
+  text-align: center;
+  font-size: 20px;
+  ${props => props.selected && "color: #94A5F5; font-weight: bold;"}
 `;

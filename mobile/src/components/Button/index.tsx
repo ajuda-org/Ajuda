@@ -1,5 +1,5 @@
 import React from "react";
-import { TouchableOpacity } from 'react-native';
+import { TouchableOpacityProps } from 'react-native';
 import { useTheme } from "../../contexts/theme";
 
 import { ButtonContainer, Text } from "./styles";
@@ -9,11 +9,12 @@ interface IButton {
   color?: string;
 }
 
-const Button: React.FC<IButton & React.RefObject<TouchableOpacity>> = ({ text, color ,  ...rest }) => {
+const Button: React.FC<IButton & TouchableOpacityProps> = ({ text, color, disabled,  ...rest }) => {
   const { theme } = useTheme();
 
   return (
     <ButtonContainer
+      disabled={disabled}
       backgroundColor={color ? color : theme.PrimaryColor}
       {...rest}
     >

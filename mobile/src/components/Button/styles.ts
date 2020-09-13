@@ -11,6 +11,7 @@ export const ButtonContainer = styled.TouchableOpacity<IButton>`
   justify-content: center;
   align-items: center;
   border-radius: 30px;
+  ${props => props.disabled && "opacity: 0.5;"}
 `;
 
 export const Text = styled.Text`
