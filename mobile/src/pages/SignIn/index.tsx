@@ -67,7 +67,7 @@ export default function Login() {
       <Head backgroundColor={theme.PrimaryColor}>
         <BackgroundContent>
           <BackgroundColumn>
-            <ArrowLeftButton onPress={() => navigate("Landing")} />
+            <ArrowLeftButton color="#FFF" onPress={() => navigate("Landing")} />
           </BackgroundColumn>
          </BackgroundContent>
          <TitleContainer>

@@ -53,7 +53,7 @@ const Welcome: React.FC = ({ navigation }) => {
         >
           <BackgroundContent>
             <BackgroundColumn>
-              <ArrowLeftButton onPress={() => navigation.goBack()} />
+              <ArrowLeftButton color="#FFF" onPress={() => navigation.goBack()} />
             </BackgroundColumn>
             <Image source={profile == "Helped" ? WallpaperHelped : WallpaperHelper } />
           </BackgroundContent>

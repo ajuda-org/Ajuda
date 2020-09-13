@@ -46,7 +46,7 @@ export default function Login({ navigation }) {
       <Head backgroundColor={theme.PrimaryColor}>
         <BackgroundContent>
           <BackgroundColumn>
-            <ArrowLeftButton onPress={() => navigate("SignIn")} />
+            <ArrowLeftButton color="#FFF" onPress={() => navigate("SignIn")} />
           </BackgroundColumn>
          </BackgroundContent>
          <TitleContainer>

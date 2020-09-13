@@ -1,16 +1,16 @@
 import React from 'react';
 import { TouchableOpacity, Image, GestureResponderEvent } from 'react-native';
-
-import arrowleft from "../../assets/images/icons/arrowleft.png";
+import { Feather as Icon } from "@expo/vector-icons";
 
 interface IButton {
   onPress?: ((event: GestureResponderEvent) => void) | undefined;
+  color: string;
 }
 
-const ArrowLeftButton: React.FC<IButton> = ({ onPress }) => {
+const ArrowLeftButton: React.FC<IButton> = ({ onPress, color }) => {
   return (
-    <TouchableOpacity onPress={onPress} style={{width: 40}}>
-      <Image source={arrowleft}/>
+    <TouchableOpacity onPress={onPress}>
+      <Icon name="arrow-left" color={color} size={20} />
     </TouchableOpacity>
   );
 }
