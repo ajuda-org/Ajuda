@@ -8,7 +8,7 @@ import styled from "styled-components/native";
 const statusBarHeight = Platform.OS === 'android' ? Constants.statusBarHeight : 0;
 
 export const Container = styled.View`
-  height: ${hp('100%')}px;
+  height: 100%;
   background: #516DF5;
   justify-content: center;
   padding: 0 30px;
