@@ -90,7 +90,7 @@ const Helps = () => {
           {requestsHelper && requestsHelper.requests.map( request => (
             <ItemContainer key={request.id}>
               <ItemTypeContainer>
-                <SvgUri width={60} height={60} uri={`http://192.168.15.2:3333/uploads/${request.item.image}`} />
+                <SvgUri width={60} height={60} uri={`http://192.168.0.22:3333/uploads/${request.item.image}`} />
               </ItemTypeContainer>
               <ItemContent>
                 <TextContainer>

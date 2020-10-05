@@ -13,7 +13,7 @@ const itemService = {
       return {
         id: item.id,
         name: item.name,
-        image_url: `http://192.168.15.2:3333/uploads/${item.image}`
+        image_url: `http://192.168.0.22:3333/uploads/${item.image}`
       };
     });
     return serializedItems;
