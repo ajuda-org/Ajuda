@@ -50,30 +50,28 @@ interface Request {
 const Helps = () => {
   const { theme } = useTheme();
   const navigation = useNavigation();
-  const [requestsHelper, setRequestsHelper] = useState([]);
+  const [requestsOwner, setRequestsOwner] = useState([]);
   const [id, setId] = useState("");
 
   useEffect(() => {
-    async function getRequests() {
+    async function getUser() {
       const userId = await AsyncStorage.getItem("userId");
-      await api
-        .get("/helpers", {
-          params: {
-            userId: userId,
-            status: 1
-          }
-        })
-        .then((response) => {
-          setRequestsHelper(response.data);
-        }).catch(({response}) => {
-          console.log(response);
-        })
+      setId(userId);
     }
-    getRequests()
-  })
-  
-  useEffect(() => {
-    
+    getUser()
+
+    api
+      .get("/owners", {
+        params: {
+          ownerId: id,
+          status: 1
+        }
+      })
+      .then((response) => {
+        setRequestsOwner(response.data);
+      }).catch((err) => {
+        console.log(err);
+      })
   }, []);
 
   async function logOut() {
@@ -102,7 +100,7 @@ const Helps = () => {
         </View>
 
         <ScrollView style={{flex: 1}}>
-          {requestsHelper && requestsHelper?.requests?.map( request => (
+          {requestsOwner && requestsOwner.map( request => (
             <ItemContainer key={request.id}>
               <ItemTypeContainer>
                 <SvgUri width={60} height={60} uri={`http://192.168.0.22:3333/uploads/${request.item.image}`} />
@@ -119,11 +117,11 @@ const Helps = () => {
                 </TextContainer>
                 <HelpedContainer>
                   <ImageContainer>
-                    <Image source={{ uri: `https://api.adorable.io/avatars/32/${request.owner.id}`}} />
+                    <Image source={{ uri: `https://api.adorable.io/avatars/32/${request.helpers[0].user.id}`}} />
                   </ImageContainer>
                   <HelpedInfos>
                     <HelpedName>
-                      {request.owner.name}
+                      {request.helpers[0].user.name}
                     </HelpedName>
                     <HelpedPoint>
                       4.7

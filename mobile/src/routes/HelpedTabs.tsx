@@ -2,7 +2,7 @@ import React from 'react';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
 
-import { Requests } from "../pages/Helped";
+import { Requests, Helps } from "../pages/Helped";
 
 import { useTheme } from "../contexts/theme";
 
@@ -32,7 +32,7 @@ function HelpedTabs() {
       />
       <Screen
         name="Help"
-        component={Requests}
+        component={Helps}
         options={{
           tabBarLabel: 'AJUDAS',
           tabBarIcon: ({ color, focused }) => {

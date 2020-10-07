@@ -58,13 +58,14 @@ const Requests = () => {
   const { theme } = useTheme();
 
   const [name, setName] = useState("");
+  const [id, setId] = useState("");
 
   useEffect(() => {
     async function loadInfos() {
       const userName = await AsyncStorage.getItem("name");
       const userId = await AsyncStorage.getItem("userId");
       setName(userName);
-
+      setId(userId)
       await api
         .get("/owners", {
           params: {
@@ -90,9 +91,15 @@ const Requests = () => {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <Container>
-        <TouchableOpacity onPress={() => logOut()}>
-          <Icon name="log-out" color={theme.PrimaryColor} size={20} />
-        </TouchableOpacity>
+        <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
+          <TouchableOpacity onPress={() => logOut()}>
+            <Icon name="log-out" color={theme.PrimaryColor} size={20} />
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={() => navigation.navigate("Profile")}>
+            <Image source={{ uri: `https://api.adorable.io/avatars/32/${id}`}} />
+          </TouchableOpacity>
+        </View>
         <TextContainer color={theme.PrimaryColor}>
           <Title>Bem vindo { name }.</Title>
           <Description>

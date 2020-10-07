@@ -6,7 +6,9 @@ import {
   StyleSheet,
   SafeAreaView,
   Image,
-  Dimensions
+  Dimensions,
+  AsyncStorage,
+  Alert
 } from "react-native";
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { Feather as Icon } from "@expo/vector-icons";
@@ -42,11 +44,31 @@ const Detail = () => {
   const routeParams = route.params as Params;
   const [request, setRequest] = useState<Request>();
 
+  const [id, setId] = useState("");
+
   useEffect(() => {
+    async function getUser() {
+      const userId = await AsyncStorage.getItem("userId");
+      setId(userId);
+    }
+    getUser()
     api.get(`/requests/${routeParams.request_id}`).then(response => {
       setRequest(response.data);
     });
   })
+
+  async function handleHelp(request_id){
+    await api.post("/helpers", {
+      requestId: request_id,
+      userId: id
+    }).then(async (response) => {
+        Alert.alert("Ajuda criada com sucesso!");
+        navigation.navigate("Helps")
+      
+    }).catch(({ response }) => {
+      console.log(response)
+    })
+  }
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -91,7 +113,7 @@ const Detail = () => {
                   </View>
                 </View>
               <View style={{width: "100%", marginBottom: 10, justifyContent: "center", alignItems: "center"}}>
-                <Button text="Ajudar"/>
+                <Button text="Ajudar" onPress={() => handleHelp(request.id)}/>
               </View>
             </View>
             )

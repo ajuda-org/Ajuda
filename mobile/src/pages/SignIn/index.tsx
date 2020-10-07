@@ -41,7 +41,7 @@ export default function Login() {
   const [error, setError] = useState<error>({error: "", field: ""});
 
   async function handleSubmit() {
-    api.post("/sessions", {
+    await api.post("/sessions", {
       email,
       password,
       type: profile.toLowerCase()

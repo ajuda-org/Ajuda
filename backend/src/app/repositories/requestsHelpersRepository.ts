@@ -1,5 +1,6 @@
 import { getRepository, Repository, In, Not, UpdateResult } from "typeorm";
 import { RequestHelper } from "../models";
+import requestsRepository from "./requestsRepository";
 
 interface IHelpers {
   requestId: string;
@@ -38,14 +39,15 @@ const requestsHelpersRepository = {
 
   create: async ({ requestId, userId }: IHelpers): Promise<RequestHelper> => {
     const repository = requestsHelpersRepository.getRepo();
-
+    // STATUS 1 TEMPORÁRIAMENTE
     const requestHelper = await repository.create({
       request_id: Number(requestId),
-      user_id: Number(userId)
+      user_id: Number(userId),
+      status: 1
     });
 
     await repository.save(requestHelper);
-
+    await requestsRepository.update(requestId);
     return requestHelper;
   },
 
