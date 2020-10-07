@@ -104,3 +104,10 @@ export const ItemTitle = styled.Text<IItems>`
   text-align: center;
   font-size: 18px;
 `;
+
+export const Image = styled.Image`
+  width: 32px;
+  height: 32px;
+  resize-mode: cover;
+  border-radius: 16px;
+`;

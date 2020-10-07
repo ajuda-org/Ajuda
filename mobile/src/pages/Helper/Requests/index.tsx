@@ -4,6 +4,8 @@ import {
   ScrollView,
   SafeAreaView,
   Alert,
+  View,
+
   AsyncStorage
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
@@ -27,7 +29,8 @@ import {
   MapMarkerTitle,
   ItemsContainer,
   Items,
-  ItemTitle
+  ItemTitle,
+  Image
 } from "./style"
 
 interface Item {
@@ -58,8 +61,16 @@ const Requests = () => {
   const [selectedItems, setSelectedItems] = useState<number[]>([]);
   const [Requests, setRequests] = useState<Request[]>([]);
   const [name, setName] = useState("");
+  const [id, setId] = useState("");
 
   useEffect(() => {
+    async function getUser() {
+      const userId = await AsyncStorage.getItem("userId");
+      const userName = await AsyncStorage.getItem("name");
+      setName(userName);
+      setId(userId);
+    }
+    getUser();
     api.get("/items").then((response) => {
       setItems(response.data);
     });
@@ -67,8 +78,6 @@ const Requests = () => {
 
   useEffect(() => {
     async function loadPosition() {
-      const userName = await AsyncStorage.getItem("name");
-      setName(userName);
       const { status } = await Location.requestPermissionsAsync();
 
       if (status !== "granted") {
@@ -125,9 +134,15 @@ const Requests = () => {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <Container>
-        <TouchableOpacity onPress={() => logOut()}>
-          <Icon name="log-out" color={theme.PrimaryColor} size={20} />
-        </TouchableOpacity>
+        <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
+          <TouchableOpacity onPress={() => logOut()}>
+            <Icon name="log-out" color={theme.PrimaryColor} size={20} />
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={() => navigation.navigate("Profile")}>
+            <Image source={{ uri: `https://api.adorable.io/avatars/32/${id}`}} />
+          </TouchableOpacity>
+        </View>
         <TextContainer>
           <Title>Bem vindo { name }.</Title>
           <Description>

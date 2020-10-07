@@ -51,8 +51,14 @@ const Helps = () => {
   const { theme } = useTheme();
   const navigation = useNavigation();
   const [requestsHelper, setRequestsHelper] = useState();
+  const [id, setId] = useState("");
 
   useEffect(() => {
+    async function getUser() {
+      const userId = await AsyncStorage.getItem("userId");
+      setId(userId);
+    }
+    getUser()
     api
       .get("/helpers", {
         params: {
@@ -76,9 +82,15 @@ const Helps = () => {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <View style={styles.container}>
-        <TouchableOpacity onPress={() => logOut()}>
-          <Icon name="log-out" color={theme.PrimaryColor} size={20} />
-        </TouchableOpacity>
+        <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
+          <TouchableOpacity onPress={() => logOut()}>
+            <Icon name="log-out" color={theme.PrimaryColor} size={20} />
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={() => navigation.navigate("Profile")}>
+            <Image source={{ uri: `https://api.adorable.io/avatars/32/${id}`}} />
+          </TouchableOpacity>
+        </View>
         <View style={{borderLeftWidth: 5, borderLeftColor: "#54C7C0", padding: 10, marginTop: 20}}>
           <Text style={styles.title}>Pedidos atendidos.</Text>
           <Text style={styles.description}>
