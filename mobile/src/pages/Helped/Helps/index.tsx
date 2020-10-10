@@ -37,20 +37,10 @@ interface Item {
   image_url: string;
 }
 
-interface Request {
-  id: number;
-  title: string;
-  image: string;
-  latitude: number;
-  longitude: number;
-  image_url: string;
-  item: Item;
-}
-
 const Helps = () => {
   const { theme } = useTheme();
   const navigation = useNavigation();
-  const [requestsOwner, setRequestsOwner] = useState([]);
+  const [requests, setRequests] = useState([]);
   const [id, setId] = useState("");
 
   useEffect(() => {
@@ -60,16 +50,16 @@ const Helps = () => {
 
       const response = await api.get("/owners", {
         params: {
-          ownerId: id,
+          ownerId: userId,
           status: 1
         }
       })
      
-      setRequestsOwner(response.data);
+      setRequests(response.data);
      
     }
     getData()
-  }, []);
+  }, [requests]);
 
   function handleNavigateToDetail(id: number) {
     navigation.navigate("HelpDetailOwner", { request_id: id });
@@ -101,7 +91,7 @@ const Helps = () => {
         </View>
 
         <ScrollView style={{flex: 1}}>
-          {requestsOwner && requestsOwner.map( request => (
+          {requests && requests.map( request => (
             <ItemContainer key={request.id} onPress={() => handleNavigateToDetail(request.id)}>
               <ItemTypeContainer>
                 <SvgUri width={60} height={60} uri={`http://192.168.0.22:3333/uploads/${request.item.image}`} />
