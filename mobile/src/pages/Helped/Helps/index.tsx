@@ -21,7 +21,7 @@ import {
   ItemTypeContainer,
   ItemContent,
   TextContainer,
-  Date,
+  Date as DateText,
   Title,
   HelpedContainer,
   ImageContainer,
@@ -34,14 +34,33 @@ import {
 interface Item {
   id: number;
   name: string;
-  image_url: string;
+  image: string;
 }
+
+interface Request {
+  id: number;
+  title: string;
+  description: string;
+  created_at: string;
+  helpers: [{
+    user: {
+      id: string;
+      name: string;
+      whatsapp: string;
+      email: string;
+    }
+  }]
+  latitude: string;
+  longitude: string;
+  item: Item
+}
+
 
 const Helps = () => {
   const { theme } = useTheme();
   const navigation = useNavigation();
-  const [requests, setRequests] = useState([]);
-  const [id, setId] = useState("");
+  const [requests, setRequests] = useState<Request[]>([]);
+  const [id, setId] = useState<string | null>("");
 
   useEffect(() => {
     async function getData() {
@@ -91,37 +110,40 @@ const Helps = () => {
         </View>
 
         <ScrollView style={{flex: 1}}>
-          {requests && requests.map( request => (
-            <ItemContainer key={request.id} onPress={() => handleNavigateToDetail(request.id)}>
-              <ItemTypeContainer>
-                <SvgUri width={60} height={60} uri={`http://192.168.0.22:3333/uploads/${request.item.image}`} />
-              </ItemTypeContainer>
-              <ItemContent>
-                <TextContainer>
-                  <Date>
-                  {request.created_at}
-                  </Date>
+          {requests && requests.map( request => 
+              {
+                
+                
+                return ( <ItemContainer key={request.id} onPress={() => handleNavigateToDetail(request.id)}>
+                  <ItemTypeContainer>
+                    <SvgUri width={60} height={60} uri={`http://192.168.0.22:3333/uploads/${request.item.image}`} />
+                  </ItemTypeContainer>
+                  <ItemContent>
+                    <TextContainer>
+                      <DateText>
+                        Em {new Date(request.created_at).toLocaleDateString()} às {new Date(request.created_at).toLocaleTimeString()}
+                      </DateText>
 
-                  <Title>
-                    {request.title}
-                  </Title>
-                </TextContainer>
-                <HelpedContainer>
-                  <ImageContainer>
-                    <Image source={{ uri: `https://api.adorable.io/avatars/32/${request.helpers[0].user.id}`}} />
-                  </ImageContainer>
-                  <HelpedInfos>
-                    <HelpedName>
-                      {request.helpers[0].user.name}
-                    </HelpedName>
-                    <HelpedPoint>
-                      4.7
-                    </HelpedPoint>
-                  </HelpedInfos>
-                </HelpedContainer>
-              </ItemContent>
-            </ItemContainer>
-          ))}
+                      <Title>
+                        {request.title}
+                      </Title>
+                    </TextContainer>
+                    <HelpedContainer>
+                      <ImageContainer>
+                        <Image source={{ uri: `https://api.adorable.io/avatars/32/${request.helpers[0].user.id}`}} />
+                      </ImageContainer>
+                      <HelpedInfos>
+                        <HelpedName>
+                          {request.helpers[0].user.name}
+                        </HelpedName>
+                        <HelpedPoint>
+                          4.7
+                        </HelpedPoint>
+                      </HelpedInfos>
+                    </HelpedContainer>
+                  </ItemContent>
+                </ItemContainer>)
+          })}
         </ScrollView>
       </View>
     </SafeAreaView>

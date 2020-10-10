@@ -25,7 +25,7 @@ import {
   ItemContainer,
   ItemTypeContainer,
   ItemContent,
-  Date,
+  Date as DateText,
   HelpedContainer,
   ImageContainer,
   Image,
@@ -115,9 +115,9 @@ const Requests = () => {
                 </ItemTypeContainer>
                 <ItemContent>
                   <View>
-                    <Date>
-                    {request.created_at}
-                    </Date>
+                    <DateText>
+                      Em {new Date(request.created_at).toLocaleDateString()} às {new Date(request.created_at).toLocaleTimeString()}
+                    </DateText>
 
                     <Title>
                       {request.title}

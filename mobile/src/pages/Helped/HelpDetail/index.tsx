@@ -31,12 +31,21 @@ interface Request {
   id: string;
   title: string;
   description: string;
+  created_at: string;
   owner: {
     id: string;
     name: string;
     whatsapp: string;
     email: string;
-  }
+  },
+  helpers: [{
+    user: {
+      id: string;
+      name: string;
+      whatsapp: string;
+      email: string;
+    }
+  }]
   latitude: string;
   longitude: string;
 }
@@ -48,7 +57,7 @@ const Detail = () => {
   const routeParams = route.params as Params;
   const [request, setRequest] = useState<Request>();
 
-  const [id, setId] = useState("");
+  const [id, setId] = useState<string | null>("");
   const message = `Olá ${request?.owner?.name}, estou entrando em contato pois gostaria de ajudar o seu pedido "${request?.title}".`
 
   useEffect(() => {
@@ -65,7 +74,7 @@ const Detail = () => {
   function sendEmail() {
     MailComposer.composeAsync({
       subject: `Ajudante do caso: ${request?.title}`,
-      recipients: [request.helpers[0].user.email],
+      recipients: [String(request?.helpers[0].user.email)],
       body: message
     })
   }
