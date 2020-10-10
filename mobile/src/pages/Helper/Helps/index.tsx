@@ -56,6 +56,7 @@ const Helps = () => {
   useEffect(() => {
     async function getRequests() {
       const userId = await AsyncStorage.getItem("userId");
+      setId(userId)
       await api
         .get("/helpers", {
           params: {
@@ -82,6 +83,10 @@ const Helps = () => {
     navigation.navigate("Landing");
   }
 
+  function handleNavigateToDetail(id: number) {
+    navigation.navigate("HelpDetail", { request_id: id });
+  }
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <View style={styles.container}>
@@ -103,7 +108,7 @@ const Helps = () => {
 
         <ScrollView style={{flex: 1}}>
           {requestsHelper && requestsHelper?.requests?.map( request => (
-            <ItemContainer key={request.id}>
+            <ItemContainer key={request.id} onPress={() => handleNavigateToDetail(request.id)}>
               <ItemTypeContainer>
                 <SvgUri width={60} height={60} uri={`http://192.168.0.22:3333/uploads/${request.item.image}`} />
               </ItemTypeContainer>
