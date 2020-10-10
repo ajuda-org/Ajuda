@@ -54,25 +54,26 @@ const Helps = () => {
   const [id, setId] = useState("");
 
   useEffect(() => {
-    async function getUser() {
+    async function getData() {
       const userId = await AsyncStorage.getItem("userId");
       setId(userId);
-    }
-    getUser()
 
-    api
-      .get("/owners", {
+      const response = await api.get("/owners", {
         params: {
           ownerId: id,
           status: 1
         }
       })
-      .then((response) => {
-        setRequestsOwner(response.data);
-      }).catch((err) => {
-        console.log(err);
-      })
+     
+      setRequestsOwner(response.data);
+     
+    }
+    getData()
   }, []);
+
+  function handleNavigateToDetail(id: number) {
+    navigation.navigate("HelpDetailOwner", { request_id: id });
+  }
 
   async function logOut() {
     await AsyncStorage.setItem("userId", "")
@@ -92,7 +93,7 @@ const Helps = () => {
             <Image source={{ uri: `https://api.adorable.io/avatars/32/${id}`}} />
           </TouchableOpacity>
         </View>
-        <View style={{borderLeftWidth: 5, borderLeftColor: "#54C7C0", padding: 10, marginTop: 20}}>
+        <View style={{borderLeftWidth: 5, borderLeftColor: theme.PrimaryColor, padding: 10, marginTop: 20}}>
           <Text style={styles.title}>Pedidos atendidos.</Text>
           <Text style={styles.description}>
             Esses são seus pedidos atendidos.
@@ -101,7 +102,7 @@ const Helps = () => {
 
         <ScrollView style={{flex: 1}}>
           {requestsOwner && requestsOwner.map( request => (
-            <ItemContainer key={request.id}>
+            <ItemContainer key={request.id} onPress={() => handleNavigateToDetail(request.id)}>
               <ItemTypeContainer>
                 <SvgUri width={60} height={60} uri={`http://192.168.0.22:3333/uploads/${request.item.image}`} />
               </ItemTypeContainer>

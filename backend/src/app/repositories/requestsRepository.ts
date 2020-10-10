@@ -47,7 +47,7 @@ const requestsRepository = {
     const repository = requestsRepository.getRepo();
     const request = await repository.find({
       where: { id: Number(id) },
-      relations: ["owner", "item"]
+      relations: ["owner", "item", "helpers", "helpers.user"]
     });
     return request[0];
   },

@@ -16,7 +16,7 @@ const requestsController = {
   show: async (req: Request, res: Response): Promise<Response> => {
     const { id } = req.params;
 
-    const requestsServiceResponse = await requestsService.showUserById(id);
+    const requestsServiceResponse = await requestsService.showRequestById(id);
 
     return res
       .status(requestsServiceResponse.status)

@@ -11,7 +11,7 @@ import Helped from "./HelpedTabs";
 import Helper from "./HelperTabs";
 
 import { Detail, HelpDetail } from "../pages/Helper";
-import { NewRequest } from "../pages/Helped";
+import { NewRequest, HelpDetail as HelpDetailOwner } from "../pages/Helped";
 
 const { Navigator, Screen } = createStackNavigator();
 
@@ -27,6 +27,7 @@ function AppStack() {
         <Screen name="Helper" component={Helper} />
         <Screen name="Detail" component={Detail} />
         <Screen name="HelpDetail" component={HelpDetail} />
+        <Screen name="HelpDetailOwner" component={HelpDetailOwner} />
         <Screen name="NewRequest" component={NewRequest} />
       </Navigator>
     </NavigationContainer>

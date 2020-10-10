@@ -16,7 +16,7 @@ const requestsService = {
     return requests;
   },
 
-  showUserById: async (
+  showRequestById: async (
     id: string
   ): Promise<IServiceResponseWithError | IServiceResponseWithRequest> => {
     const RequestExist = await requestsRepository.showRequestById(id);
