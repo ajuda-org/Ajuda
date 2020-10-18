@@ -58,7 +58,7 @@ const Detail = () => {
   const [request, setRequest] = useState<Request>();
 
   const [id, setId] = useState<string | null>("");
-  const message = `Olá ${request?.owner?.name}, estou entrando em contato pois gostaria de ajudar o seu pedido "${request?.title}".`
+  const message = `Olá ${request?.helpers[0].user.name}, estou entrando em contato pois você se interessou em me ajudar em: "${request?.title}".`
 
   useEffect(() => {
     async function getUser() {
@@ -73,7 +73,7 @@ const Detail = () => {
 
   function sendEmail() {
     MailComposer.composeAsync({
-      subject: `Ajudante do caso: ${request?.title}`,
+      subject: `Ajudante do pedido: ${request?.title}`,
       recipients: [String(request?.helpers[0].user.email)],
       body: message
     })

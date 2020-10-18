@@ -64,7 +64,7 @@ const Detail = () => {
 
   function sendEmail() {
     MailComposer.composeAsync({
-      subject: `Ajudante do caso: ${request?.title}`,
+      subject: `Ajudante do pedido: ${request?.title}`,
       recipients: [request.owner.email],
       body: message
     })
