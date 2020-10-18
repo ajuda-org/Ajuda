@@ -72,10 +72,6 @@ const Helps = () => {
     }
     getRequests()
   })
-  
-  useEffect(() => {
-    
-  }, []);
 
   async function logOut() {
     await AsyncStorage.setItem("userId", "")
